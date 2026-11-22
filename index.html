@@ -505,47 +505,88 @@
     transition: width 0.4s ease;
   }
 
-  /* Daily Trend Spark-Bars on Dashboard */
+  /* Daily Trend Interactive SVG Chart on Dashboard */
   .dash-trend-card {
     margin-bottom: 16px;
   }
-  .dash-trend-bars {
-    display: grid;
-    grid-template-columns: repeat(31, minmax(0, 1fr));
-    gap: 3px;
-    align-items: flex-end;
-    height: 112px;
-    padding: 10px 8px 6px;
-    background: #f8fafc;
+  .dash-chart-box {
+    position: relative;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     border: 1px solid rgba(60, 60, 67, 0.08);
-    border-radius: 13px;
+    border-radius: 14px;
+    padding: 12px 12px 8px;
     overflow-x: auto;
   }
-  .dash-trend-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    height: 100%;
-    gap: 4px;
-    min-width: 12px;
-  }
-  .dash-trend-stack {
+  .dash-chart-svg-wrap {
+    position: relative;
     width: 100%;
-    max-width: 14px;
-    display: flex;
-    flex-direction: column-reverse;
-    border-radius: 4px 4px 2px 2px;
-    overflow: hidden;
-    background: rgba(148, 163, 184, 0.14);
+    min-width: 620px;
+    height: 184px;
   }
-  .dash-trend-pagi { background: #f59e0b; width: 100%; }
-  .dash-trend-sore { background: #007aff; width: 100%; }
-  .dash-trend-lbl {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
+  .dash-chart-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .dash-peak-badge-html {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.2px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 3px 10px rgba(21, 128, 61, 0.34);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .dash-peak-badge-html::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+    border-left: 4.5px solid transparent;
+    border-right: 4.5px solid transparent;
+    border-top: 5px solid #15803d;
+  }
+  .dash-chart-point {
+    cursor: pointer;
+    transition: r 0.15s ease, stroke-width 0.15s ease;
+  }
+  .dash-chart-point:hover {
+    r: 5.5;
+    stroke-width: 3;
+  }
+  .dash-chart-hover-bar {
+    fill: transparent;
+    cursor: pointer;
+  }
+  .dash-chart-hover-bar:hover {
+    fill: rgba(0, 122, 255, 0.05);
+  }
+  .dash-chart-info-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 7px 11px;
+    background: #ffffff;
+    border: 1px solid rgba(60, 60, 67, 0.08);
+    border-radius: 10px;
+    font-size: 11.5px;
+    color: var(--text);
   }
   .dash-alert-pill {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -3173,6 +3214,7 @@ let state = {
   dashInspectFarmerIdx: 0,
   dashJumpOpen: false,
   dashInspectSearch: '',
+  dashChartMode: 'bar_grouped',
   potonganJumpOpen: false,
   potonganSearch: '',
   perdayJumpOpen: false,
@@ -4756,31 +4798,177 @@ function renderCurrentTab(animateTransition = false) {
     const totNonPakan = Math.max(0, totPotAll - totPakan);
     const saversCount = calcs.filter(x => x.r.tabunganLiter > 0).length;
 
-    // 31-day spark bars
+    // 31-day daily totals for interactive SVG chart
     const dailyTotals = DAYS.map((dayNum, dIdx) => {
       const p = state.farmers.reduce((a, f) => a + (Number(f.daily[dIdx * 2]) || 0), 0);
       const s = state.farmers.reduce((a, f) => a + (Number(f.daily[dIdx * 2 + 1]) || 0), 0);
       return { dayNum, p, s, tot: p + s };
     });
-    const maxDayTot = Math.max(1, ...dailyTotals.map(d => d.tot));
+    const maxDayTot = Math.max(10, ...dailyTotals.map(d => d.tot));
     const activeDaysCount = dailyTotals.filter(d => d.tot > 0).length;
     const avgDailyPos = activeDaysCount > 0 ? totLiter / activeDaysCount : 0;
     const peakDay = dailyTotals.reduce((best, cur) => cur.tot > best.tot ? cur : best, { dayNum: '-', tot: 0 });
+    const chartMode = state.dashChartMode || 'bar_grouped';
 
-    const trendBarsHtml = dailyTotals.map(d => {
-      const hPct = Math.round((d.tot / maxDayTot) * 84);
-      const pPct = d.tot > 0 ? Math.round((d.p / d.tot) * 100) : 50;
-      const sPct = 100 - pPct;
+    const svgW = 860;
+    const svgH = 184;
+    const padL = 40;
+    const padR = 14;
+    const padT = 30;
+    const padB = 26;
+    const plotW = svgW - padL - padR;
+    const plotH = svgH - padT - padB;
+    const slotW = plotW / dailyTotals.length;
+
+    const getY = (val) => padT + plotH - ((val / maxDayTot) * plotH);
+    const getCenterX = (idx) => padL + idx * slotW + slotW / 2;
+
+    let peakOverlayHtml = '';
+
+    // Horizontal grid lines (0%, 25%, 50%, 75%, 100%)
+    const gridLevels = [0, 0.25, 0.5, 0.75, 1];
+    const gridSvg = gridLevels.map(lvl => {
+      const val = Math.round(maxDayTot * lvl);
+      const y = getY(val);
       return `
-        <div class="dash-trend-col" title="Tgl ${d.dayNum}: Pagi ${fmtNum(d.p)} L • Sore ${fmtNum(d.s)} L • Total ${fmtNum(d.tot)} L">
-          <div class="dash-trend-stack" style="height:${Math.max(4, hPct)}px;">
-            <div class="dash-trend-pagi" style="height:${pPct}%;"></div>
-            <div class="dash-trend-sore" style="height:${sPct}%;"></div>
-          </div>
-          <span class="dash-trend-lbl">${d.dayNum}</span>
-        </div>
+        <line x1="${padL}" y1="${y}" x2="${svgW - padR}" y2="${y}" stroke="rgba(148,163,184,0.26)" stroke-dasharray="${lvl === 0 ? '0' : '3 3'}" stroke-width="1"/>
+        <text x="${padL - 6}" y="${y + 3.5}" text-anchor="end" font-size="9.5" font-weight="600" fill="#8e8e93">${val}</text>
       `;
     }).join('');
+
+    const xLabelsSvg = dailyTotals.map((d, idx) => {
+      const cx = getCenterX(idx);
+      const isPeak = d.tot === peakDay.tot && d.tot > 0;
+      return `<text x="${cx}" y="${svgH - 6}" text-anchor="middle" font-size="9.5" font-weight="${isPeak ? '800' : '700'}" fill="${isPeak ? '#007aff' : '#64748b'}">${d.dayNum}</text>`;
+    }).join('');
+
+    let chartSeriesSvg = `
+      <defs>
+        <linearGradient id="barPagiGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fbbf24"/>
+          <stop offset="100%" stop-color="#f59e0b"/>
+        </linearGradient>
+        <linearGradient id="barSoreGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#38bdf8"/>
+          <stop offset="100%" stop-color="#007aff"/>
+        </linearGradient>
+        <linearGradient id="barPeakGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#34c759"/>
+          <stop offset="100%" stop-color="#16a34a"/>
+        </linearGradient>
+        <linearGradient id="areaTotalGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#007aff" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#007aff" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+    `;
+
+    if (chartMode === 'area_trend') {
+      // Gaya 2: Grafik Area & Garis Tren (Total Harian + Garis Pagi & Sore)
+      const avgY = getY(avgDailyPos);
+      const ptsTot = dailyTotals.map((d, i) => ({ x: getCenterX(i), y: getY(d.tot), d, i }));
+      const ptsPagi = dailyTotals.map((d, i) => ({ x: getCenterX(i), y: getY(d.p) }));
+      const ptsSore = dailyTotals.map((d, i) => ({ x: getCenterX(i), y: getY(d.s) }));
+
+      const buildSmoothPath = (pts) => {
+        if (!pts.length) return '';
+        if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
+        let dStr = `M ${pts[0].x} ${pts[0].y}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i];
+          const p1 = pts[i + 1];
+          const cx = (p0.x + p1.x) / 2;
+          dStr += ` C ${cx} ${p0.y}, ${cx} ${p1.y}, ${p1.x} ${p1.y}`;
+        }
+        return dStr;
+      };
+
+      const lineTotPath = buildSmoothPath(ptsTot);
+      const areaTotPath = `${lineTotPath} L ${ptsTot[ptsTot.length - 1].x} ${padT + plotH} L ${ptsTot[0].x} ${padT + plotH} Z`;
+      const linePagiPath = buildSmoothPath(ptsPagi);
+      const lineSorePath = buildSmoothPath(ptsSore);
+
+      const dotsSvg = ptsTot.map(pt => {
+        const isPeak = pt.d.tot === peakDay.tot && pt.d.tot > 0;
+        if (pt.d.tot <= 0) return '';
+        if (isPeak && !peakOverlayHtml) {
+          const leftPct = ((pt.x / svgW) * 100).toFixed(2);
+          const topPx = Math.max(22, Math.round(pt.y - 9));
+          peakOverlayHtml = `<div class="dash-peak-badge-html" style="left:${leftPct}%; top:${topPx}px;">★ ${fmtNum(pt.d.tot)} L</div>`;
+        }
+        return `
+          <g onmouseenter="updateDashChartHover(${pt.i})" style="cursor:pointer;">
+            ${isPeak ? `<circle cx="${pt.x}" cy="${pt.y}" r="8" fill="rgba(22, 163, 74, 0.18)"/>` : ''}
+            <circle cx="${pt.x}" cy="${pt.y}" r="${isPeak ? 5 : 3.2}" fill="${isPeak ? '#16a34a' : '#007aff'}" stroke="#ffffff" stroke-width="2" class="dash-chart-point"/>
+          </g>
+        `;
+      }).join('');
+
+      chartSeriesSvg += `
+        <path d="${areaTotPath}" fill="url(#areaTotalGrad)"/>
+        <path d="${linePagiPath}" fill="none" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3" opacity="0.9"/>
+        <path d="${lineSorePath}" fill="none" stroke="#32ade6" stroke-width="1.6" stroke-dasharray="4 3" opacity="0.9"/>
+        <path d="${lineTotPath}" fill="none" stroke="#007aff" stroke-width="2.6" stroke-linecap="round"/>
+        ${avgDailyPos > 0 ? `
+          <line x1="${padL}" y1="${avgY}" x2="${svgW - padR}" y2="${avgY}" stroke="#ef4444" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <rect x="${svgW - padR - 64}" y="${Math.max(2, avgY - 14)}" width="62" height="13" rx="6.5" fill="#ef4444"/>
+          <text x="${svgW - padR - 33}" y="${Math.max(11, avgY - 5)}" text-anchor="middle" font-size="8" font-weight="700" fill="#ffffff">Rata2 ${fmtNum(avgDailyPos)}</text>
+        ` : ''}
+        ${dotsSvg}
+      `;
+    } else {
+      // Gaya 1 (Default Utama): Diagram Batang Berdampingan (Grouped Bar Pagi vs Sore)
+      const subBarW = Math.max(4.5, Math.min(9, (slotW - 6) / 2));
+      const maxPairVal = Math.max(10, ...dailyTotals.map(d => Math.max(d.p, d.s)));
+      const getPairY = (val) => padT + plotH - ((val / maxPairVal) * plotH);
+      const barsSvg = dailyTotals.map((d, i) => {
+        const cx = getCenterX(i);
+        const hP = (d.p / maxPairVal) * plotH;
+        const hS = (d.s / maxPairVal) * plotH;
+        const yP = getPairY(d.p);
+        const yS = getPairY(d.s);
+        const isPeak = d.tot === peakDay.tot && d.tot > 0;
+        const topY = Math.min(d.p > 0 ? yP : padT + plotH, d.s > 0 ? yS : padT + plotH);
+        if (isPeak && !peakOverlayHtml) {
+          const leftPct = ((cx / svgW) * 100).toFixed(2);
+          const topPx = Math.max(22, Math.round(topY - 6));
+          peakOverlayHtml = `<div class="dash-peak-badge-html" style="left:${leftPct}%; top:${topPx}px;">★ ${fmtNum(d.tot)} L</div>`;
+        }
+
+        return `
+          <g onmouseenter="updateDashChartHover(${i})" style="cursor:pointer;">
+            <rect x="${cx - subBarW - 1}" y="${padT}" width="${subBarW}" height="${plotH}" rx="3" fill="rgba(148,163,184,0.08)"/>
+            <rect x="${cx + 1}" y="${padT}" width="${subBarW}" height="${plotH}" rx="3" fill="rgba(148,163,184,0.08)"/>
+            ${d.p > 0 ? `<rect x="${cx - subBarW - 1}" y="${yP}" width="${subBarW}" height="${Math.max(2.5, hP)}" rx="3" fill="url(#barPagiGrad)"/>` : ''}
+            ${d.s > 0 ? `<rect x="${cx + 1}" y="${yS}" width="${subBarW}" height="${Math.max(2.5, hS)}" rx="3" fill="url(#barSoreGrad)"/>` : ''}
+          </g>
+        `;
+      }).join('');
+      chartSeriesSvg += barsSvg;
+    }
+
+    const hoverColumnsSvg = dailyTotals.map((d, i) => {
+      const x = padL + i * slotW;
+      return `<rect class="dash-chart-hover-bar" x="${x}" y="${padT}" width="${slotW}" height="${plotH}" onmouseenter="updateDashChartHover(${i})"/>`;
+    }).join('');
+
+    const trendChartHtml = `
+      <div class="dash-chart-box">
+        <div class="dash-chart-svg-wrap">
+          ${peakOverlayHtml}
+          <svg class="dash-chart-svg" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none">
+            ${gridSvg}
+            ${xLabelsSvg}
+            ${chartSeriesSvg}
+            ${hoverColumnsSvg}
+          </svg>
+        </div>
+        <div class="dash-chart-info-bar" id="dashChartHoverInfo">
+          <span>💡 Arahkan kursor ke batang tanggal untuk melihat rincian setoran Pagi &amp; Sore.</span>
+          <span style="color:var(--muted);">Puncak Tertinggi: <strong style="color:var(--success-dark);">Tgl ${peakDay.dayNum} (${fmtNum(peakDay.tot)} L)</strong></span>
+        </div>
+      </div>
+    `;
 
     // Top 5 Peternak Unggulan
     const top5 = [...calcs]
@@ -4867,17 +5055,28 @@ function renderCurrentTab(animateTransition = false) {
         </div>
 
         <div class="dash-card dash-trend-card">
-          <div class="dash-card-header">
+          <div class="dash-card-header" style="flex-wrap:wrap; gap:10px;">
             <div>
-              <h3 class="dash-card-title">📈 Tren Setoran Harian POS (Tanggal 26 – 25)</h3>
+              <h3 class="dash-card-title">📊 Grafik Batang Setoran Harian POS (Tanggal 26 – 25)</h3>
               <span class="dash-card-sub">Rata-rata ${fmtNum(avgDailyPos)} L/hari aktif • Puncak Tgl ${peakDay.dayNum} (${fmtNum(peakDay.tot)} L)</span>
             </div>
-            <div class="dash-legend">
-              <span><span class="dash-dot" style="background:#f59e0b;"></span>Pagi</span>
-              <span><span class="dash-dot" style="background:#007aff;"></span>Sore</span>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <div class="dash-legend">
+                <span><span class="dash-dot" style="background:#f59e0b;"></span>Pagi</span>
+                <span><span class="dash-dot" style="background:#007aff;"></span>${chartMode === 'area_trend' ? 'Total' : 'Sore'}</span>
+                ${chartMode === 'area_trend'
+                  ? `<span><span class="dash-dot" style="background:#32ade6;"></span>Sore</span>`
+                  : `<span><span class="dash-dot" style="background:#16a34a;"></span>Puncak</span>`}
+              </div>
+              <div class="perday-view-box" style="height:30px;">
+                <button type="button" class="pill-btn ${chartMode !== 'area_trend' ? 'active' : ''}" style="height:24px; font-size:11px;"
+                  onclick="state.dashChartMode='bar_grouped'; renderCurrentTab();">📶 Pagi vs Sore</button>
+                <button type="button" class="pill-btn ${chartMode === 'area_trend' ? 'active' : ''}" style="height:24px; font-size:11px;"
+                  onclick="state.dashChartMode='area_trend'; renderCurrentTab();">📈 Grafik Area Tren</button>
+              </div>
             </div>
           </div>
-          <div class="dash-trend-bars">${trendBarsHtml}</div>
+          ${trendChartHtml}
         </div>
 
         <div id="kpiGrid" class="summary-grid"></div>
@@ -6799,6 +6998,21 @@ function renderAll() {
   renderSettings();
   renderKPI();
   renderCurrentTab();
+}
+
+function updateDashChartHover(dayIdx) {
+  const infoEl = document.getElementById('dashChartHoverInfo');
+  if (!infoEl || dayIdx < 0 || dayIdx >= DAYS.length) return;
+  const dayNum = DAYS[dayIdx];
+  const p = state.farmers.reduce((a, f) => a + (Number(f.daily[dayIdx * 2]) || 0), 0);
+  const s = state.farmers.reduce((a, f) => a + (Number(f.daily[dayIdx * 2 + 1]) || 0), 0);
+  const tot = p + s;
+  const activeCnt = state.farmers.filter(f => ((Number(f.daily[dayIdx * 2]) || 0) + (Number(f.daily[dayIdx * 2 + 1]) || 0)) > 0).length;
+
+  infoEl.innerHTML = `
+    <span>📅 <strong>Tanggal ${dayNum}</strong> &nbsp;•&nbsp; ☀️ Pagi: <strong style="color:#b45309;">${fmtNum(p)} L</strong> &nbsp;•&nbsp; 🌙 Sore: <strong style="color:var(--accent);">${fmtNum(s)} L</strong></span>
+    <span>Total Harian: <strong style="color:var(--success-dark);">${fmtNum(tot)} L</strong> (${activeCnt} anggota setor)</span>
+  `;
 }
 
 function renderSettings() {
