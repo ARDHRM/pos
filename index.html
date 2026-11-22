@@ -1720,6 +1720,275 @@
   }
   .toast.show { opacity: 1; }
 
+  /* ================= LOGIN PAGE & ACCOUNT SETTINGS (iOS HARMONIZED THEME) ================= */
+  .auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: linear-gradient(145deg, #e8f1ff 0%, #f2f2f7 48%, #e4f7ed 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .auth-screen.hidden {
+    display: none;
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 410px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 24px;
+    padding: 28px 26px 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09), 0 2px 10px rgba(0, 122, 255, 0.06);
+    animation: iosTabEnter 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .auth-brand-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #007aff 0%, #32ade6 100%);
+    color: #ffffff;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: 0 8px 20px rgba(0, 122, 255, 0.28);
+  }
+  .auth-title {
+    margin: 0;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+  }
+  .auth-sub {
+    margin: 5px 0 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 13px;
+  }
+  .auth-field label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text);
+    padding-left: 4px;
+  }
+  .auth-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .auth-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid rgba(60, 60, 67, 0.14);
+    border-radius: 13px;
+    background: #ffffff;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    outline: none;
+    transition: all 0.18s ease;
+  }
+  .auth-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3.5px var(--accent-soft);
+  }
+  .auth-eye-btn {
+    position: absolute;
+    right: 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 8px;
+  }
+  .auth-eye-btn:hover {
+    color: var(--accent);
+    background: var(--fill);
+  }
+  .auth-error-box {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.28);
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 12px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .auth-error-box.show {
+    display: block;
+  }
+  .auth-submit-btn {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 122, 255, 0.3);
+    transition: transform 0.15s ease, background-color 0.18s ease;
+    margin-top: 4px;
+  }
+  .auth-submit-btn:hover {
+    background: var(--accent-hover);
+  }
+  .auth-submit-btn:active {
+    transform: scale(0.98);
+  }
+  .auth-quick-fill {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(60, 60, 67, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .auth-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .auth-demo-chip {
+    border: 1px solid rgba(0, 122, 255, 0.22);
+    background: rgba(0, 122, 255, 0.08);
+    color: var(--accent);
+    border-radius: var(--radius-pill);
+    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+  .auth-demo-chip:hover {
+    background: var(--accent);
+    color: #ffffff;
+  }
+
+  /* Topbar User Profile Pill & Sidebar User Card */
+  .topbar-user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #ffffff;
+    border: 1px solid rgba(60, 60, 67, 0.12);
+    border-radius: var(--radius-pill);
+    padding: 4px 11px 4px 5px;
+    cursor: pointer;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.16s ease;
+  }
+  .topbar-user-pill:hover {
+    border-color: var(--accent);
+    box-shadow: 0 3px 10px rgba(0, 122, 255, 0.12);
+  }
+  .user-avatar-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sidebar-user-card {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 11px 12px;
+    border: 1px solid rgba(60, 60, 67, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .sidebar-user-card:hover {
+    background: #f9f9fb;
+  }
+  .account-hero-card {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-md);
+  }
+  .account-hero-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007aff 0%, #32ade6 100%);
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(0, 122, 255, 0.35);
+  }
+  .role-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .role-badge-pill.is-admin {
+    background: rgba(0, 122, 255, 0.14);
+    color: var(--accent);
+  }
+  .role-badge-pill.is-operator {
+    background: rgba(52, 199, 89, 0.14);
+    color: var(--success-dark);
+  }
+  @media print {
+    .auth-screen {
+      display: none !important;
+    }
+  }
+
   /* iOS Save Confirmation Pill & Button Pulse */
   @keyframes iosSavePillIn {
     0% { opacity: 0; transform: translate(-50%, -18px) scale(0.84); }
@@ -2443,6 +2712,48 @@
 </head>
 <body>
 
+<!-- Halaman Login Terintegrasi (Tema Selaras iOS) -->
+<div id="loginScreen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand-badge">🥛</div>
+    <h2 class="auth-title" id="loginPosTitle">POS PENAMPUNGAN SUSU</h2>
+    <p class="auth-sub" id="loginPosSubtitle">SAPI BALAP BARENG • Silakan masuk dengan akun petugas atau admin POS untuk mengelola data.</p>
+
+    <div id="loginErrorBox" class="auth-error-box"></div>
+
+    <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+      <div class="auth-field">
+        <label for="loginUsername">Username</label>
+        <div class="auth-input-wrap">
+          <input type="text" id="loginUsername" class="auth-input" placeholder="Masukkan username..." autocomplete="username" required>
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label for="loginPassword">Kata Sandi / PIN</label>
+        <div class="auth-input-wrap">
+          <input type="password" id="loginPassword" class="auth-input" style="padding-right:64px;" placeholder="Masukkan kata sandi..." autocomplete="current-password" required>
+          <button type="button" class="auth-eye-btn" onclick="toggleLoginPwdVisibility(this)">Lihat</button>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin:4px 2px 14px; font-size:12px;">
+        <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; color:var(--text); font-weight:500;">
+          <input type="checkbox" id="loginRememberMe" class="ios-switch" checked>
+          <span>Ingat sesi login di perangkat ini</span>
+        </label>
+      </div>
+
+      <button type="submit" class="auth-submit-btn">Masuk ke Sistem POS</button>
+    </form>
+
+    <div class="auth-quick-fill">
+      <div style="text-align:center; font-size:11px; color:var(--muted); font-weight:600;">Akses Cepat Akun Tersedia:</div>
+      <div id="loginQuickAccounts" class="auth-quick-chips"></div>
+    </div>
+  </div>
+</div>
+
 <div class="topbar">
   <div class="topbar-left">
     <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Tampilkan / Sembunyikan Menu Kiri">
@@ -2497,6 +2808,10 @@
         </button>
       </div>
     </div>
+    <button type="button" id="topbarUserBtn" class="topbar-user-pill" onclick="switchTab('account_settings', null, false)" title="Pengaturan Akun User & Keluar">
+      <span class="user-avatar-circle" id="topbarUserAvatar">AD</span>
+      <span id="topbarUserName">ARIF DHARMA</span>
+    </button>
     <div class="period-chip" id="topbarPeriodBadge"></div>
   </div>
 </div>
@@ -2628,12 +2943,26 @@
 
     <!-- Grup 4: Sinkronisasi Cloud & Multi-Device di Paling Bawah Sidebar -->
     <div class="ios-nav-section">
-      <div class="ios-nav-header">Cadangan &amp; Multi-Device</div>
+      <div class="ios-nav-header">Akun, Cadangan &amp; Multi-Device</div>
       <div class="ios-nav-card">
+        <button class="tab" id="navAccountBtn" onclick="switchTab('account_settings', this)">
+          <span class="tab-left">
+            <span class="nav-icon" style="background:#5856d6;">👤</span>
+            <span class="tab-label">Setting Account User</span>
+          </span>
+          <span class="nav-chevron">›</span>
+        </button>
         <button class="tab" id="navGdriveBtn" onclick="switchTab('gdrive_settings', this)">
           <span class="tab-left">
             <span class="nav-icon" style="background:#0a84ff;">☁️</span>
             <span class="tab-label">Sinkronisasi Cloud &amp; Multi-Device</span>
+          </span>
+          <span class="nav-chevron">›</span>
+        </button>
+        <button class="tab" onclick="askLogoutUser()" style="color:var(--danger);">
+          <span class="tab-left">
+            <span class="nav-icon" style="background:#ff3b30;">🚪</span>
+            <span class="tab-label">Keluar / Ganti Akun</span>
           </span>
           <span class="nav-chevron">›</span>
         </button>
@@ -2762,101 +3091,427 @@ const EMPTY_DED = () => ({
 
 const INITIAL_FARMERS = [
   { no: 1, no_anggota: "19001", nama: "SENIN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 2, no_anggota: "19009", nama: "BILAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 3, no_anggota: "19010", nama: "SUMALI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 4, no_anggota: "19011", nama: "MAHPUD", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 5, no_anggota: "19012", nama: "SOIMIN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 6, no_anggota: "19013", nama: "SIGIT", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 7, no_anggota: "19017", nama: "REHAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 8, no_anggota: "19018", nama: "SAERAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 9, no_anggota: "19021", nama: "SAIMIN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 10, no_anggota: "19022", nama: "TOHARI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 11, no_anggota: "19023", nama: "PAMBAYU", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 12, no_anggota: "19024", nama: "ARIF", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 13, no_anggota: "19025", nama: "RONI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 14, no_anggota: "19026", nama: "PARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 15, no_anggota: "19027", nama: "GANI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 16, no_anggota: "19028", nama: "JEMARI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 17, no_anggota: "19029", nama: "SLAMET", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 18, no_anggota: "19032", nama: "PARSUN M", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 19, no_anggota: "19033", nama: "ALIP", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 20, no_anggota: "19034", nama: "SADENI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 21, no_anggota: "19035", nama: "HARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 22, no_anggota: "19037", nama: "ANJAS", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 23, no_anggota: "19038", nama: "KATEMIN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 24, no_anggota: "19042", nama: "SUMARI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 25, no_anggota: "19043", nama: "SUTRISNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 26, no_anggota: "19044", nama: "SURAJI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 27, no_anggota: "19045", nama: "PAIR", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 28, no_anggota: "19046", nama: "P.PARSUN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 29, no_anggota: "19047", nama: "ADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 30, no_anggota: "19051", nama: "SUPRAPTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 31, no_anggota: "19052", nama: "MESENI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 32, no_anggota: "19054", nama: "HARIANTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 33, no_anggota: "19056", nama: "RIANTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 34, no_anggota: "19057", nama: "WAHYUDI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 35, no_anggota: "19058", nama: "ANTOK", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 36, no_anggota: "19059", nama: "KAMTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 37, no_anggota: "19064", nama: "NURI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 38, no_anggota: "19066", nama: "GUNADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 39, no_anggota: "19067", nama: "SAINEM", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 40, no_anggota: "19068", nama: "SAUDI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
-  { no: 41, no_anggota: "19069", nama: "IRPAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 2, no_anggota: "19002", nama: "SUMARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 3, no_anggota: "19003", nama: "SUPARMAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 4, no_anggota: "19004", nama: "SUKARDI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 5, no_anggota: "19005", nama: "SUTRISNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 6, no_anggota: "19006", nama: "SUGENG", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 7, no_anggota: "19007", nama: "SUYANTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 8, no_anggota: "19008", nama: "SUNARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 9, no_anggota: "19009", nama: "SUTIKNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 10, no_anggota: "19010", nama: "SUWITO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 11, no_anggota: "19011", nama: "SUWANDI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 12, no_anggota: "19012", nama: "SURATNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 13, no_anggota: "19013", nama: "SUDARMAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 14, no_anggota: "19014", nama: "SUDARSONO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 15, no_anggota: "19015", nama: "SUDARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 16, no_anggota: "19016", nama: "SUDARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 17, no_anggota: "19017", nama: "SUHARTONO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 18, no_anggota: "19018", nama: "SUHARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 19, no_anggota: "19019", nama: "SUHARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 20, no_anggota: "19020", nama: "SUJATMIKO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 21, no_anggota: "19021", nama: "SUKARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 22, no_anggota: "19022", nama: "SUKARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 23, no_anggota: "19023", nama: "SUKIRMAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 24, no_anggota: "19024", nama: "SUKIRNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 25, no_anggota: "19025", nama: "SULISTYO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 26, no_anggota: "19026", nama: "SUMADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 27, no_anggota: "19027", nama: "SUMARJI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 28, no_anggota: "19028", nama: "SUMARSONO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 29, no_anggota: "19029", nama: "SUMARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 30, no_anggota: "19030", nama: "SUNARDI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 31, no_anggota: "19031", nama: "SUNARJI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 32, no_anggota: "19032", nama: "SUNARYO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 33, no_anggota: "19033", nama: "SUPADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 34, no_anggota: "19034", nama: "SUPARJI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 35, no_anggota: "19035", nama: "SUPARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 36, no_anggota: "19036", nama: "SUPARTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 37, no_anggota: "19037", nama: "SUPRIYADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 38, no_anggota: "19038", nama: "SUPRIYANTO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 39, no_anggota: "19039", nama: "SURADI", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 40, no_anggota: "19040", nama: "SURATMAN", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
+  { no: 41, no_anggota: "19041", nama: "SUTARNO", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
   { no: 42, no_anggota: "", nama: "SUJAK", daily: EMPTY_DAILY(), ded: EMPTY_DED() },
   { no: 43, no_anggota: "", nama: "BOIMIN", daily: EMPTY_DAILY(), ded: EMPTY_DED() }
+];
+
+const INITIAL_USERS = [
+  {
+    id: 'usr_admin_1',
+    username: 'ardhrm',
+    password: '123',
+    fullName: 'ARIF DHARMA',
+    role: 'Administrator',
+    jabatan: 'Admin POS',
+    phone: ''
+  },
+  {
+    id: 'usr_petugas_1',
+    username: 'petugas',
+    password: '123',
+    fullName: 'Petugas Pencatat Susu',
+    role: 'Operator Pencatat',
+    jabatan: 'Petugas Pencatat',
+    phone: ''
+  }
 ];
 
 // ================= STATE MANAGEMENT =================
 let state = {
   config: { ...DEFAULT_CONFIG },
   farmers: JSON.parse(JSON.stringify(INITIAL_FARMERS)),
+  users: JSON.parse(JSON.stringify(INITIAL_USERS)),
+  currentUserId: null,
+  requireLogin: true,
   currentTab: 'dashboard',
   inputPeriod: 'p1',
   blankPeriod: 'p1',
   blankIncludeDay31: true,
-  blankMode: 'empty',
-  selectedSlipFarmer: 'ALL',
-  slipRangeStart: 1,
-  slipRangeEnd: 10,
-  slipPrintMode: 'front_only',
-  slipJumpOpen: false,
-  slipSettingsOpen: false,
-  settingsFarmerQuery: '',
+  perdayViewMode: 'table',
+  perdayCardLayout: 'grid',
+  potonganViewMode: 'table',
+  activeFarmerIdx: 0,
   dashInspectFarmerIdx: 0,
   dashJumpOpen: false,
   dashInspectSearch: '',
-  potonganViewMode: 'table',
   potonganJumpOpen: false,
   potonganSearch: '',
-  slipSearch: '',
-  fromDashboard: false,
-  activeFarmerIdx: 0,
-  hideZeroRows: false,
-  perdayViewMode: 'table',
-  perdayCardLayout: 'grid',
   perdayJumpOpen: false,
   perdaySearch: '',
-  reportPaperPrefs: {
-    rekap_bulanan: 'a4_landscape',
-    lap_bulanan: 'a4_portrait',
-    rekap_tabungan: 'a4_portrait',
-    p26_5: 'letter_landscape',
-    p6_15: 'letter_landscape',
-    p16_25: 'letter_landscape',
-    blangko_kosong: 'letter_landscape'
-  },
+  slipSearch: '',
+  selectedSlipFarmer: 'ALL',
+  slipRangeStart: 1,
+  slipRangeEnd: 43,
+  slipPrintMode: 'front_only',
+  slipSettingsOpen: false,
+  slipJumpOpen: false,
+  hideZeroRows: false,
+  fromDashboard: false,
+  settingsFarmerQuery: '',
+  reportPaperPrefs: {},
   gdriveMeta: {
-    connected: false,
-    accessToken: '',
     fileId: '',
     lastSync: '',
     lastSyncMode: '',
-    syncing: false
+    syncing: false,
+    accessToken: ''
   }
 };
 
 const STORAGE_KEY = 'sapi_balap_pos_susu_v1';
+const AUTH_SESSION_KEY = 'sapi_balap_auth_session_v1';
 let gdriveSyncTimer = null;
+
+function normalizeUsersList(rawUsers) {
+  if (!Array.isArray(rawUsers) || rawUsers.length === 0) {
+    return JSON.parse(JSON.stringify(INITIAL_USERS));
+  }
+  const normalized = rawUsers.map((u, idx) => ({
+    id: u.id || `usr_${Date.now()}_${idx}`,
+    username: String(u.username || `user${idx + 1}`).trim().toLowerCase(),
+    password: String(u.password || '123'),
+    fullName: String(u.fullName || u.username || `User ${idx + 1}`).trim(),
+    role: u.role === 'Administrator' ? 'Administrator' : 'Operator Pencatat',
+    jabatan: String(u.jabatan || (u.role === 'Administrator' ? 'Admin POS' : 'Petugas Pencatat')).trim(),
+    phone: String(u.phone || '').trim()
+  }));
+
+  // Pastikan admin utama ARIF DHARMA (@ardhrm) selalu terdaftar sebagai Administrator utama
+  const primaryIdx = normalized.findIndex(u => u.id === 'usr_admin_1' || u.username === 'ardhrm');
+  if (primaryIdx === -1) {
+    normalized.unshift(JSON.parse(JSON.stringify(INITIAL_USERS[0])));
+  } else {
+    normalized[primaryIdx] = {
+      ...normalized[primaryIdx],
+      id: 'usr_admin_1',
+      username: 'ardhrm',
+      fullName: 'ARIF DHARMA',
+      role: 'Administrator',
+      jabatan: 'Admin POS'
+    };
+    if (primaryIdx > 0) {
+      const [primaryUser] = normalized.splice(primaryIdx, 1);
+      normalized.unshift(primaryUser);
+    }
+  }
+  return normalized;
+}
+
+function getCurrentUser() {
+  if (!Array.isArray(state.users) || state.users.length === 0) {
+    state.users = normalizeUsersList(INITIAL_USERS);
+  }
+  return state.users.find(u => u.id === state.currentUserId) || null;
+}
+
+function getUserInitials(name) {
+  const parts = String(name || 'U').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'U';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function renderAuthUI() {
+  const loginScreen = document.getElementById('loginScreen');
+  const user = getCurrentUser();
+  const titleEl = document.getElementById('loginPosTitle');
+  const subEl = document.getElementById('loginPosSubtitle');
+  const quickBox = document.getElementById('loginQuickAccounts');
+
+  if (titleEl) titleEl.textContent = `POS ${state.config.pos_name || 'SAPI BALAP BARENG'}`;
+  if (subEl) {
+    subEl.textContent = `Cooling Unit ${state.config.cooling_loc || 'BARENG'} • Masuk untuk mengelola setoran susu, potongan & laporan.`;
+  }
+  if (quickBox) {
+    quickBox.innerHTML = state.users.slice(0, 4).map(u => `
+      <button type="button" class="auth-demo-chip" onclick="fillDemoLogin('${u.username}', '${u.password.replace(/'/g, "\\'")}')">
+        👤 ${u.fullName} (@${u.username})
+      </button>
+    `).join('');
+  }
+
+  if (!user && state.requireLogin !== false) {
+    if (loginScreen) loginScreen.classList.remove('hidden');
+  } else {
+    if (loginScreen) loginScreen.classList.add('hidden');
+  }
+
+  const activeUser = user || state.users[0];
+  if (activeUser) {
+    const initials = getUserInitials(activeUser.fullName);
+    const topAvatar = document.getElementById('topbarUserAvatar');
+    const topName = document.getElementById('topbarUserName');
+    const sideAvatar = document.getElementById('sidebarUserAvatar');
+    const sideName = document.getElementById('sidebarUserName');
+    const sideRole = document.getElementById('sidebarUserRole');
+
+    if (topAvatar) topAvatar.textContent = initials;
+    if (topName) topName.textContent = activeUser.fullName;
+    if (sideAvatar) sideAvatar.textContent = initials;
+    if (sideName) sideName.textContent = activeUser.fullName;
+    if (sideRole) sideRole.textContent = `@${activeUser.username} • ${activeUser.jabatan || activeUser.role}`;
+  }
+}
+
+function fillDemoLogin(username, password) {
+  const uEl = document.getElementById('loginUsername');
+  const pEl = document.getElementById('loginPassword');
+  const errEl = document.getElementById('loginErrorBox');
+  if (uEl) uEl.value = username;
+  if (pEl) pEl.value = password;
+  if (errEl) errEl.classList.remove('show');
+}
+
+function toggleLoginPwdVisibility(btnEl) {
+  const pEl = document.getElementById('loginPassword');
+  if (!pEl) return;
+  const isHidden = pEl.type === 'password';
+  pEl.type = isHidden ? 'text' : 'password';
+  if (btnEl) btnEl.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+}
+
+function handleLoginSubmit(e) {
+  if (e) e.preventDefault();
+  const uVal = String(document.getElementById('loginUsername')?.value || '').trim().toLowerCase();
+  const pVal = String(document.getElementById('loginPassword')?.value || '');
+  const remember = Boolean(document.getElementById('loginRememberMe')?.checked);
+  const errEl = document.getElementById('loginErrorBox');
+
+  const matched = state.users.find(u => u.username.toLowerCase() === uVal && u.password === pVal);
+  if (!matched) {
+    if (errEl) {
+      errEl.textContent = '⚠️ Username atau kata sandi tidak sesuai. Silakan periksa kembali.';
+      errEl.classList.add('show');
+    }
+    return;
+  }
+
+  if (errEl) errEl.classList.remove('show');
+  state.currentUserId = matched.id;
+  if (remember) {
+    safeStorageSet(AUTH_SESSION_KEY, matched.id);
+  } else {
+    safeStorageRemove(AUTH_SESSION_KEY);
+  }
+
+  const pEl = document.getElementById('loginPassword');
+  if (pEl) pEl.value = '';
+
+  renderAuthUI();
+  renderAll();
+  triggerSaveAnimation(`👋 Selamat datang, ${matched.fullName}`);
+
+  // Otomatis memuat data JSON terbaru dari Google Drive setelah berhasil login
+  if (String(state.config.gdrive_gas_url || '').trim()) {
+    pullFromGoogleDrive(false);
+  }
+}
+
+function askLogoutUser() {
+  const user = getCurrentUser();
+  const modal = document.getElementById('modalBackdrop');
+  const body = document.getElementById('modalBody');
+  if (!modal || !body) return;
+  body.innerHTML = `
+    <h3>Keluar dari Akun?</h3>
+    <p>Anda sedang masuk sebagai <strong>${user ? user.fullName : 'Petugas'}</strong>. Sesi akan dikunci dan kembali ke halaman Login.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-soft" onclick="closeModal()">Batal</button>
+      <button type="button" class="btn btn-danger" onclick="confirmLogoutUser()">🚪 Keluar Sekarang</button>
+    </div>
+  `;
+  modal.classList.add('open');
+}
+
+function confirmLogoutUser() {
+  closeModal();
+  state.currentUserId = null;
+  state.requireLogin = true;
+  safeStorageRemove(AUTH_SESSION_KEY);
+  renderAuthUI();
+  showToast('🔒 Sesi dikunci. Silakan login kembali.');
+}
+
+function updateCurrentUserProfile() {
+  const user = getCurrentUser();
+  if (!user) return;
+  const fullName = String(document.getElementById('accFullName')?.value || '').trim();
+  const username = String(document.getElementById('accUsername')?.value || '').trim().toLowerCase().replace(/\s+/g, '');
+  const jabatan = String(document.getElementById('accJabatan')?.value || '').trim();
+  const phone = String(document.getElementById('accPhone')?.value || '').trim();
+
+  if (!fullName || !username) {
+    showToast('⚠️ Nama lengkap dan username wajib diisi.');
+    return;
+  }
+  const duplicate = state.users.some(u => u.id !== user.id && u.username.toLowerCase() === username);
+  if (duplicate) {
+    showToast('⚠️ Username sudah digunakan akun lain.');
+    return;
+  }
+
+  user.fullName = fullName;
+  user.username = username;
+  user.jabatan = jabatan;
+  user.phone = phone;
+
+  saveState();
+  renderAuthUI();
+  renderCurrentTab();
+  triggerSaveAnimation('✅ Profil akun berhasil diperbarui');
+}
+
+function updateCurrentUserPassword() {
+  const user = getCurrentUser();
+  if (!user) return;
+  const oldPwd = String(document.getElementById('accOldPwd')?.value || '');
+  const newPwd = String(document.getElementById('accNewPwd')?.value || '');
+  const confirmPwd = String(document.getElementById('accConfirmPwd')?.value || '');
+
+  if (oldPwd !== user.password) {
+    showToast('⚠️ Kata sandi lama tidak sesuai.');
+    return;
+  }
+  if (newPwd.length < 3) {
+    showToast('⚠️ Kata sandi baru minimal 3 karakter.');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    showToast('⚠️ Konfirmasi kata sandi baru tidak cocok.');
+    return;
+  }
+
+  user.password = newPwd;
+  saveState();
+  renderCurrentTab();
+  triggerSaveAnimation('🔐 Kata sandi akun berhasil diubah');
+}
+
+function addNewUserAccount() {
+  const currentUser = getCurrentUser();
+  if (currentUser && currentUser.role !== 'Administrator') {
+    showToast('⚠️ Hanya Administrator yang dapat menambah akun baru.');
+    return;
+  }
+  const fullName = String(document.getElementById('newAccFullName')?.value || '').trim();
+  const username = String(document.getElementById('newAccUsername')?.value || '').trim().toLowerCase().replace(/\s+/g, '');
+  const password = String(document.getElementById('newAccPassword')?.value || '').trim();
+  const role = document.getElementById('newAccRole')?.value === 'Administrator' ? 'Administrator' : 'Operator Pencatat';
+
+  if (!fullName || !username || !password) {
+    showToast('⚠️ Nama, username, dan kata sandi wajib diisi.');
+    return;
+  }
+  if (state.users.some(u => u.username.toLowerCase() === username)) {
+    showToast('⚠️ Username sudah terdaftar.');
+    return;
+  }
+
+  state.users.push({
+    id: `usr_${Date.now()}`,
+    username,
+    password,
+    fullName,
+    role,
+    jabatan: role === 'Administrator' ? 'Admin POS' : 'Petugas Pencatat',
+    phone: ''
+  });
+
+  saveState();
+  renderAuthUI();
+  renderCurrentTab();
+  triggerSaveAnimation(`✅ Akun @${username} berhasil dibuat`);
+}
+
+function askDeleteUserAccount(userId) {
+  if (userId === 'usr_admin_1') {
+    showToast('⚠️ Akun Admin Utama tidak dapat dihapus.');
+    return;
+  }
+  if (state.users.length <= 1) {
+    showToast('⚠️ Minimal harus tersisa 1 akun aktif di sistem.');
+    return;
+  }
+  if (userId === state.currentUserId) {
+    showToast('⚠️ Tidak dapat menghapus akun yang sedang digunakan.');
+    return;
+  }
+  const target = state.users.find(u => u.id === userId);
+  if (!target) return;
+
+  const modal = document.getElementById('modalBackdrop');
+  const body = document.getElementById('modalBody');
+  if (!modal || !body) return;
+  body.innerHTML = `
+    <h3>Hapus Akun @${target.username}?</h3>
+    <p>Akun milik <strong>${target.fullName}</strong> (${target.role}) akan dihapus dari daftar pengguna POS.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-soft" onclick="closeModal()">Batal</button>
+      <button type="button" class="btn btn-danger" onclick="confirmDeleteUserAccount('${userId}')">Hapus Akun</button>
+    </div>
+  `;
+  modal.classList.add('open');
+}
+
+function confirmDeleteUserAccount(userId) {
+  state.users = state.users.filter(u => u.id !== userId);
+  closeModal();
+  saveState();
+  renderAuthUI();
+  renderCurrentTab();
+  showToast('🗑️ Akun pengguna berhasil dihapus.');
+}
+
+function toggleRequireLoginSetting(checked) {
+  state.requireLogin = Boolean(checked);
+  if (!state.requireLogin && !state.currentUserId && state.users[0]) {
+    state.currentUserId = state.users[0].id;
+  }
+  saveState();
+  renderAuthUI();
+  renderCurrentTab();
+  showToast(state.requireLogin ? '🔒 Layar login diaktifkan saat membuka aplikasi.' : '🔓 Auto-login tanpa layar kunci diaktifkan.');
+}
 
 function normalizeFarmersList(rawList) {
   if (!Array.isArray(rawList)) return [];
@@ -3016,7 +3671,22 @@ function loadState() {
         if (Array.isArray(parsed.farmers) && parsed.farmers.length > 0) {
           state.farmers = normalizeFarmersList(parsed.farmers);
         }
+        if (Array.isArray(parsed.users) && parsed.users.length > 0) {
+          state.users = normalizeUsersList(parsed.users);
+        } else {
+          state.users = normalizeUsersList(INITIAL_USERS);
+        }
+        if (typeof parsed.requireLogin === 'boolean') {
+          state.requireLogin = parsed.requireLogin;
+        }
       }
+    }
+
+    const savedSessionUserId = safeStorageGet(AUTH_SESSION_KEY);
+    if (savedSessionUserId && state.users.some(u => u.id === savedSessionUserId)) {
+      state.currentUserId = savedSessionUserId;
+    } else if (state.requireLogin === false && state.users[0]) {
+      state.currentUserId = state.users[0].id;
     }
 
     try {
@@ -4369,6 +5039,31 @@ function renderCurrentTab(animateTransition = false) {
               </div>
             </div>
 
+            <div class="ios-section-header">Nama Penanda Tangan Laporan (Signature)</div>
+            <div class="ios-grouped-list">
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#007aff;">✍️</span>
+                  <div><div class="ios-row-title">Ketua POS</div><div class="ios-row-sub">Mengetahui pada kolom kiri</div></div>
+                </div>
+                <div class="ios-row-input-wrap"><input type="text" class="ios-row-input text-val" value="${c.sig_ketua || ''}" placeholder="Nama Ketua POS" onchange="updateConfig('sig_ketua', this.value)"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#34c759;">📝</span>
+                  <div><div class="ios-row-title">Petugas Pencatat</div><div class="ios-row-sub">Penanda tangan kolom tengah</div></div>
+                </div>
+                <div class="ios-row-input-wrap"><input type="text" class="ios-row-input text-val" value="${c.sig_pencatat || ''}" placeholder="Nama Petugas" onchange="updateConfig('sig_pencatat', this.value)"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#ff9500;">🖊️</span>
+                  <div><div class="ios-row-title">Admin POS</div><div class="ios-row-sub">Penanda tangan kolom kanan</div></div>
+                </div>
+                <div class="ios-row-input-wrap"><input type="text" class="ios-row-input text-val" value="${c.sig_admin || ''}" placeholder="Nama Admin POS" onchange="updateConfig('sig_admin', this.value)"></div>
+              </div>
+            </div>
+
             <div class="ios-section-header">Standar Harga Susu &amp; Pakan Utama</div>
             <div class="ios-grouped-list">
               ${stdPriceRows.map(r => `
@@ -4463,7 +5158,7 @@ function renderCurrentTab(animateTransition = false) {
     `;
   }
 
-  // 0C. SINKRONISASI CLOUD & MULTI-DEVICE + CADANGAN LOKAL
+  // 0C. PENGATURAN SINKRONISASI GOOGLE DRIVE & MULTI-DEVICE
   else if (tab === 'gdrive_settings') {
     updatePrintPageStyle('landscape', 'A4', '8mm');
     toolbar.style.display = 'none';
@@ -4474,69 +5169,239 @@ function renderCurrentTab(animateTransition = false) {
       <div class="tab-animate-enter">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
           <div>
-            <h2 style="margin:0; font-size:17px;">☁️ Sinkronisasi Cloud, Multi-Device &amp; Cadangan Lokal</h2>
-            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Simpan otomatis ke Google Drive agar data selalu sama di HP maupun laptop lain.</p>
+            <h2 style="margin:0; font-size:17px;">☁️ Sinkronisasi Cloud &amp; Multi-Device</h2>
+            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Kelola cadangan JSON lokal serta sinkronisasi otomatis ke Google Drive.</p>
           </div>
           ${backToDashBtnHtml}
         </div>
 
         <div class="settings-page-grid">
           <div>
-            <div class="ios-section-header">Koneksi Google Drive (Google Apps Script)</div>
+            <div class="ios-section-header">Konfigurasi Google Apps Script (Drive)</div>
             <div class="ios-grouped-list">
-              <div class="ios-list-row" style="flex-direction:column; align-items:stretch; gap:6px;">
-                <div class="ios-row-title">URL Web App Google Apps Script</div>
-                <input type="text" class="ios-pill-input" value="${c.gdrive_gas_url || ''}" placeholder="https://script.google.com/macros/s/.../exec"
-                  onchange="updateConfig('gdrive_gas_url', this.value)">
-                <div class="ios-row-sub">Status terakhir: <strong>${gm.lastSync ? 'Tersinkron pukul ' + gm.lastSync : 'Siap menyinkronkan'}</strong></div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#007aff;">🔗</span>
+                  <div>
+                    <div class="ios-row-title">URL Web App Apps Script</div>
+                    <div class="ios-row-sub">Endpoint untuk simpan &amp; muat JSON</div>
+                  </div>
+                </div>
+                <div class="ios-row-input-wrap">
+                  <input type="text" class="ios-row-input text-val" style="width:200px;" value="${c.gdrive_gas_url || ''}" onchange="updateConfig('gdrive_gas_url', this.value)">
+                </div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#ff9500;">📁</span>
+                  <div>
+                    <div class="ios-row-title">Nama Folder Google Drive</div>
+                    <div class="ios-row-sub">Folder penyimpanan file backup JSON</div>
+                  </div>
+                </div>
+                <div class="ios-row-input-wrap">
+                  <input type="text" class="ios-row-input text-val" value="${c.gdrive_folder_name || 'POS_SUSU_SAPI_BALAP_BARENG'}" onchange="updateConfig('gdrive_folder_name', this.value)">
+                </div>
               </div>
               <div class="ios-list-row">
                 <div class="ios-row-left">
                   <span class="ios-icon-badge" style="background:#34c759;">🔄</span>
                   <div>
                     <div class="ios-row-title">Auto-Sync Otomatis</div>
-                    <div class="ios-row-sub">Kirim data otomatis setiap kali menginput</div>
+                    <div class="ios-row-sub">Kirim perubahan ke Drive secara otomatis</div>
                   </div>
                 </div>
-                <label class="ios-toggle-switch" title="Aktifkan / Nonaktifkan Auto-Sync Otomatis">
+                <label class="ios-toggle-switch">
                   <input type="checkbox" ${c.gdrive_auto_sync ? 'checked' : ''} onchange="updateConfig('gdrive_auto_sync', this.checked)">
                   <span class="ios-toggle-slider"></span>
                 </label>
               </div>
             </div>
 
-            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;">
-              <button type="button" class="btn btn-primary" onclick="saveUnifiedAll(false, false)">☁️ Simpan Sekarang ke Drive &amp; Lokal</button>
-              <button type="button" class="btn btn-success" onclick="pullFromGoogleDrive(false)">📥 Ambil Data dari Drive</button>
-              <button type="button" class="btn btn-soft" onclick="copyMultiDeviceLink()">🔗 Salin Link Multi-Device</button>
-            </div>
-
-            <div class="ios-section-header">💾 Cadangan &amp; Pemulihan Data POS (File JSON Lokal)</div>
-            <div class="ios-add-card">
-              <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">
-                Simpan salinan file JSON yang identik dengan Cloud ke perangkat Anda, pulihkan dari file backup, atau kembalikan ke data awal sistem.
+            <div class="ios-add-card" style="display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:12px; color:var(--muted);">
+                Status Terakhir: <strong>${gm.lastSync ? `Tersinkron pada ${gm.lastSync}` : 'Belum ada riwayat sinkronisasi sesi ini'}</strong>
               </div>
               <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                <button type="button" class="btn btn-primary" onclick="saveUnifiedAll(false, true)">⬇️ Unduh &amp; Sinkron JSON</button>
-                <label class="btn btn-soft" style="cursor:pointer;">
-                  ⬆️ Pulihkan File JSON
-                  <input type="file" accept=".json" style="display:none;" onchange="importBackup(event)">
-                </label>
-                <button type="button" class="btn btn-danger" onclick="askResetAll()">🔄 Reset Data Awal</button>
+                <button type="button" class="btn btn-primary" onclick="syncToGoogleDrive(false)">☁️ Simpan ke Drive</button>
+                <button type="button" class="btn btn-soft" onclick="pullFromGoogleDrive(false)">📥 Muat dari Drive</button>
+                <button type="button" class="btn btn-soft" onclick="copyMultiDeviceLink()">🔗 Salin Link Multi-Device</button>
+                <button type="button" class="btn btn-soft" onclick="copyGasTemplateCode()">📋 Salin Kode GAS</button>
               </div>
             </div>
           </div>
 
           <div>
-            <div class="ios-section-header">Panduan Menghubungkan Akun Google Sendiri (Opsional)</div>
-            <div class="ios-add-card" style="line-height:1.55; font-size:12.5px;">
-              <p style="margin-top:0;">Aplikasi ini sudah terhubung ke jembatan default. Jika ingin memakai akun Google Drive pribadi Anda sendiri:</p>
-              <ol style="padding-left:18px; margin:8px 0 12px;">
-                <li>Buka <strong>script.google.com</strong> lalu buat <strong>Proyek Baru</strong>.</li>
-                <li>Klik tombol di bawah untuk menyalin kode script, lalu tempel di editor Google Apps Script.</li>
-                <li>Klik <strong>Terapkan (Deploy) → Deployment baru → Aplikasi web</strong>, pilih akses <strong>Siapa saja (Anyone)</strong>, lalu tempel URL <code>/exec</code> ke kolom di samping.</li>
-              </ol>
-              <button type="button" class="btn btn-soft" onclick="copyGasTemplateCode()">📋 Salin Kode Google Apps Script</button>
+            <div class="ios-section-header">Cadangan File JSON Lokal &amp; Reset</div>
+            <div class="ios-add-card" style="display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:12px; color:var(--muted);">
+                Gunakan tombol di bawah untuk mengunduh cadangan file <strong>.json</strong> ke perangkat atau memulihkan data dari file lokal.
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button type="button" class="btn btn-success" onclick="saveUnifiedAll(false, true)">💾 Simpan &amp; Unduh JSON</button>
+                <label class="btn btn-soft" style="cursor:pointer;">
+                  📂 Muat File JSON Lokal
+                  <input type="file" accept=".json" style="display:none;" onchange="importBackup(event)">
+                </label>
+                <button type="button" class="btn btn-danger" onclick="askResetAll()">⚠️ Reset Semua Data</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 0D. PENGATURAN AKUN USER (ACCOUNT SETTINGS)
+  else if (tab === 'account_settings') {
+    updatePrintPageStyle('landscape', 'A4', '8mm');
+    toolbar.style.display = 'none';
+    const curUser = getCurrentUser() || state.users[0];
+    const isAdmin = curUser && curUser.role === 'Administrator';
+
+    main.innerHTML = `
+      <div class="tab-animate-enter">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+          <div>
+            <h2 style="margin:0; font-size:17px;">👤 Setting Account User &amp; Keamanan</h2>
+            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Kelola profil petugas aktif, ubah kata sandi, dan atur hak akses akun pengguna POS.</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-danger" onclick="askLogoutUser()">🚪 Keluar / Kunci Layar</button>
+            ${backToDashBtnHtml}
+          </div>
+        </div>
+
+        <div class="account-hero-card">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="account-hero-avatar">${getUserInitials(curUser.fullName)}</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <h3 style="margin:0; font-size:17px; font-weight:800;">${curUser.fullName}</h3>
+                <span class="role-badge-pill ${isAdmin ? 'is-admin' : 'is-operator'}" style="background:rgba(255,255,255,0.16); color:#ffffff;">${curUser.role}</span>
+              </div>
+              <div style="font-size:12px; opacity:0.82; margin-top:3px;">Username: <strong>@${curUser.username}</strong> • Jabatan: ${curUser.jabatan || '-'}</div>
+            </div>
+          </div>
+          <div style="font-size:11.5px; opacity:0.85; text-align:right;">
+            <div>Unit POS: <strong>${state.config.pos_name}</strong></div>
+            <div>Total Akun Terdaftar: <strong>${state.users.length} User</strong></div>
+          </div>
+        </div>
+
+        <div class="settings-page-grid">
+          <div>
+            <div class="ios-section-header">Profil Akun Sedang Login</div>
+            <div class="ios-grouped-list">
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#007aff;">🪪</span><div><div class="ios-row-title">Nama Lengkap</div></div></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accFullName" class="ios-row-input text-val" value="${curUser.fullName}"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#5856d6;">@</span><div><div class="ios-row-title">Username Login</div></div></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accUsername" class="ios-row-input text-val" value="${curUser.username}"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#34c759;">💼</span><div><div class="ios-row-title">Jabatan di POS</div></div></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accJabatan" class="ios-row-input text-val" value="${curUser.jabatan || ''}" placeholder="Admin / Pencatat"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#32ade6;">📱</span><div><div class="ios-row-title">No. HP / WhatsApp</div></div></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accPhone" class="ios-row-input text-val" value="${curUser.phone || ''}" placeholder="08xxxxxxxxxx"></div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+              <button type="button" class="btn btn-primary" onclick="updateCurrentUserProfile()">💾 Simpan Perubahan Profil</button>
+            </div>
+
+            <div class="ios-section-header">Ubah Kata Sandi / PIN</div>
+            <div class="ios-grouped-list">
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#8e8e93;">🔑</span><div><div class="ios-row-title">Kata Sandi Lama</div></div></div>
+                <div class="ios-row-input-wrap"><input type="password" id="accOldPwd" class="ios-row-input text-val" placeholder="••••••"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#ff9500;">🛡️</span><div><div class="ios-row-title">Kata Sandi Baru</div></div></div>
+                <div class="ios-row-input-wrap"><input type="password" id="accNewPwd" class="ios-row-input text-val" placeholder="Min. 3 karakter"></div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#34c759;">✓</span><div><div class="ios-row-title">Konfirmasi Sandi Baru</div></div></div>
+                <div class="ios-row-input-wrap"><input type="password" id="accConfirmPwd" class="ios-row-input text-val" placeholder="Ulangi sandi baru"></div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
+              <button type="button" class="btn btn-success" onclick="updateCurrentUserPassword()">🔐 Perbarui Kata Sandi</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="ios-section-header">Keamanan Akses Aplikasi</div>
+            <div class="ios-grouped-list">
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#ff3b30;">🔒</span>
+                  <div>
+                    <div class="ios-row-title">Wajibkan Login Saat Buka Aplikasi</div>
+                    <div class="ios-row-sub">Tampilkan halaman login jika sesi belum tersimpan</div>
+                  </div>
+                </div>
+                <label class="ios-toggle-switch">
+                  <input type="checkbox" ${state.requireLogin !== false ? 'checked' : ''} onchange="toggleRequireLoginSetting(this.checked)">
+                  <span class="ios-toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="ios-section-header">Daftar Akun Pengguna POS (${state.users.length})</div>
+            ${isAdmin ? `
+              <div class="ios-add-card">
+                <div style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:8px;">+ Tambah Akun Petugas / Admin Baru</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                  <input type="text" id="newAccFullName" class="ios-pill-input" placeholder="Nama lengkap petugas...">
+                  <input type="text" id="newAccUsername" class="ios-pill-input" placeholder="Username (tanpa spasi)">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;">
+                  <input type="password" id="newAccPassword" class="ios-pill-input" placeholder="Kata sandi / PIN">
+                  <select id="newAccRole" class="ios-pill-input">
+                    <option value="Operator Pencatat">Operator Pencatat</option>
+                    <option value="Administrator">Administrator</option>
+                  </select>
+                  <button type="button" class="btn btn-primary" onclick="addNewUserAccount()">+ Tambah</button>
+                </div>
+              </div>
+            ` : `
+              <div class="ios-add-card" style="font-size:12px; color:var(--muted);">
+                ℹ️ Anda masuk sebagai <strong>Operator Pencatat</strong>. Penambahan atau penghapusan akun lain hanya dapat dilakukan oleh Administrator.
+              </div>
+            `}
+
+            <div class="ios-grouped-list">
+              ${state.users.map(u => {
+                const isSelf = u.id === curUser.id;
+                const uIsAdmin = u.role === 'Administrator';
+                const isProtectedMainAdmin = u.id === 'usr_admin_1';
+                return `
+                  <div class="ios-list-row">
+                    <div class="ios-row-left">
+                      <span class="user-avatar-circle" style="width:32px; height:32px;">${getUserInitials(u.fullName)}</span>
+                      <div>
+                        <div class="ios-row-title" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                          <span>${u.fullName}</span>
+                          ${isProtectedMainAdmin ? `<span style="font-size:10px; background:rgba(0,122,255,0.12); color:var(--accent); padding:2px 7px; border-radius:999px; font-weight:700;">Admin Utama</span>` : ''}
+                          ${isSelf ? `<span style="font-size:10px; background:var(--fill); color:var(--muted); padding:2px 7px; border-radius:999px; font-weight:700;">Anda</span>` : ''}
+                        </div>
+                        <div class="ios-row-sub">@${u.username} • ${u.jabatan || u.role}</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <span class="role-badge-pill ${uIsAdmin ? 'is-admin' : 'is-operator'}">${uIsAdmin ? 'Admin' : 'Petugas'}</span>
+                      ${(isAdmin && !isSelf && !isProtectedMainAdmin) ? `
+                        <button type="button" class="btn btn-danger" style="height:30px; padding:0 10px; font-size:11px;" onclick="askDeleteUserAccount('${u.id}')">Hapus</button>
+                      ` : ''}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
             </div>
           </div>
         </div>
@@ -5643,8 +6508,6 @@ function renderCurrentTab(animateTransition = false) {
         `;
       }
 
-      const adminSignName = String(c.sig_admin || '').trim() || '........................';
-
       const frontPageHtml = showFront ? `
         <div class="${pMode === 'front_only' ? 'slip-batch-item' : ''}">
           <div class="page-tag-screen">📄 Halaman Depan — Slip Penerimaan &amp; Potongan (#${f.no} ${f.nama})</div>
@@ -5917,11 +6780,15 @@ function importBackup(event) {
           state.config.gdrive_gas_url = DEFAULT_GAS_WEB_APP_URL;
         }
         state.farmers = normalizeFarmersList(parsed.farmers);
+        if (Array.isArray(parsed.users) && parsed.users.length > 0) {
+          state.users = normalizeUsersList(parsed.users);
+        }
         const unifiedPayload = buildBackupPayload();
         saveState(true, unifiedPayload);
         if (state.config.gdrive_auto_sync && Boolean(String(state.config.gdrive_gas_url || '').trim())) {
           syncToGoogleDrive(true, unifiedPayload);
         }
+        renderAuthUI();
         renderSettings();
         renderAll();
         triggerSaveAnimation('✅ Data JSON lokal dimuat & diselaraskan');
@@ -5937,6 +6804,7 @@ function importBackup(event) {
 }
 
 function renderAll() {
+  renderAuthUI();
   renderSettings();
   renderKPI();
   renderCurrentTab();
@@ -6082,7 +6950,9 @@ function buildBackupPayload() {
     version: '1.0',
     exportedAt: new Date().toISOString(),
     config: JSON.parse(JSON.stringify(state.config)),
-    farmers: normalizeFarmersList(state.farmers)
+    farmers: normalizeFarmersList(state.farmers),
+    users: normalizeUsersList(state.users),
+    requireLogin: state.requireLogin !== false
   };
 }
 
