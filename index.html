@@ -2746,11 +2746,6 @@
 
       <button type="submit" class="auth-submit-btn">Masuk ke Sistem POS</button>
     </form>
-
-    <div class="auth-quick-fill">
-      <div style="text-align:center; font-size:11px; color:var(--muted); font-weight:600;">Akses Cepat Akun Tersedia:</div>
-      <div id="loginQuickAccounts" class="auth-quick-chips"></div>
-    </div>
   </div>
 </div>
 
@@ -3256,18 +3251,10 @@ function renderAuthUI() {
   const user = getCurrentUser();
   const titleEl = document.getElementById('loginPosTitle');
   const subEl = document.getElementById('loginPosSubtitle');
-  const quickBox = document.getElementById('loginQuickAccounts');
 
   if (titleEl) titleEl.textContent = `POS ${state.config.pos_name || 'SAPI BALAP BARENG'}`;
   if (subEl) {
     subEl.textContent = `Cooling Unit ${state.config.cooling_loc || 'BARENG'} • Masuk untuk mengelola setoran susu, potongan & laporan.`;
-  }
-  if (quickBox) {
-    quickBox.innerHTML = state.users.slice(0, 4).map(u => `
-      <button type="button" class="auth-demo-chip" onclick="fillDemoLogin('${u.username}', '${u.password.replace(/'/g, "\\'")}')">
-        👤 ${u.fullName} (@${u.username})
-      </button>
-    `).join('');
   }
 
   if (!user && state.requireLogin !== false) {
