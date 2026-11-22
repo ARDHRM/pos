@@ -2768,16 +2768,16 @@
 
     <form id="loginForm" onsubmit="handleLoginSubmit(event)">
       <div class="auth-field">
-        <label for="loginUsername">Username</label>
+        <label for="loginUsername">Username / Nama / No. Anggota</label>
         <div class="auth-input-wrap">
-          <input type="text" id="loginUsername" class="auth-input" placeholder="Masukkan username..." autocomplete="username" required>
+          <input type="text" id="loginUsername" class="auth-input" placeholder="Username petugas atau nama/no. peternak..." autocomplete="username" required>
         </div>
       </div>
 
       <div class="auth-field">
-        <label for="loginPassword">Kata Sandi / PIN</label>
+        <label for="loginPassword">Kata Sandi / PIN <span style="font-weight:500; color:var(--muted);">(Kosongkan untuk login Peternak)</span></label>
         <div class="auth-input-wrap">
-          <input type="password" id="loginPassword" class="auth-input" style="padding-right:64px;" placeholder="Masukkan kata sandi..." autocomplete="current-password" required>
+          <input type="password" id="loginPassword" class="auth-input" style="padding-right:64px;" placeholder="Kosongkan jika login sebagai Peternak..." autocomplete="current-password">
           <button type="button" class="auth-eye-btn" onclick="toggleLoginPwdVisibility(this)">Lihat</button>
         </div>
       </div>
@@ -2848,10 +2848,37 @@
         </button>
       </div>
     </div>
-    <button type="button" id="topbarUserBtn" class="topbar-user-pill" onclick="switchTab('account_settings', null, false)" title="Pengaturan Akun User & Keluar">
-      <span class="user-avatar-circle" id="topbarUserAvatar">AD</span>
-      <span id="topbarUserName">ARIF DHARMA</span>
-    </button>
+    <div class="topbar-sync-wrap" id="topbarUserWrap">
+      <button type="button" id="topbarUserBtn" class="topbar-user-pill" onclick="toggleTopbarUserPopover(event)" title="Klik untuk melihat info akun & keluar">
+        <span class="user-avatar-circle" id="topbarUserAvatar">AD</span>
+        <span id="topbarUserName">ARIF DHARMA</span>
+        <span style="font-size:10px; opacity:0.7;">▾</span>
+      </button>
+      <div id="topbarUserPopover" class="ios-sync-popover" role="menu">
+        <div class="ios-sync-pop-head" style="display:flex; align-items:center; gap:10px;">
+          <span class="user-avatar-circle" id="topbarUserPopAvatar" style="width:34px; height:34px; font-size:13px;">AD</span>
+          <div style="min-width:0; flex:1;">
+            <div class="ios-sync-pop-title" id="topbarUserPopFullName" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">ARIF DHARMA</div>
+            <div class="ios-sync-pop-sub" id="topbarUserPopMeta">@ardhrm • Admin POS (Administrator)</div>
+          </div>
+        </div>
+        <button type="button" class="ios-sync-pop-item" onclick="closeTopbarUserPopover(); switchTab('account_settings', null, false);">
+          <span class="ios-sync-pop-icon" style="background:#5856d6;">👤</span>
+          <div>
+            <div style="font-size:12.5px; font-weight:700;">Setting Account User</div>
+            <div style="font-size:10.5px; color:var(--muted);">Profil pengguna, sandi &amp; hak akses</div>
+          </div>
+        </button>
+        <div class="ios-sync-pop-sep"></div>
+        <button type="button" class="ios-sync-pop-item" onclick="closeTopbarUserPopover(); askLogoutUser();" style="color:var(--danger);">
+          <span class="ios-sync-pop-icon" style="background:#ff3b30;">🚪</span>
+          <div>
+            <div style="font-size:12.5px; font-weight:700;">Logout / Keluar Akun</div>
+            <div style="font-size:10.5px; color:var(--muted);">Kunci sesi &amp; kembali ke halaman login</div>
+          </div>
+        </button>
+      </div>
+    </div>
     <div class="period-chip" id="topbarPeriodBadge"></div>
   </div>
 </div>
@@ -2860,20 +2887,20 @@
   <!-- Panel Navigasi & Kontrol Bergaya iOS Settings -->
   <aside id="leftSidebar" class="sidebar">
     <!-- Dashboard Utama di Paling Atas -->
-    <div class="ios-nav-section">
+    <div class="ios-nav-section" id="navSectionDashboard">
       <div class="ios-nav-card">
         <button class="tab active" id="navDashboardBtn" onclick="switchTab('dashboard', this)">
           <span class="tab-left">
             <span class="nav-icon" style="background:#007aff;">🏠</span>
-            <span class="tab-label">Dashboard Utama</span>
+            <span class="tab-label" id="navDashboardLabel">Dashboard Utama</span>
           </span>
           <span class="nav-chevron">›</span>
         </button>
       </div>
     </div>
 
-    <!-- Pengaturan Utama di Bawah Dashboard -->
-    <div class="ios-nav-section">
+    <!-- Pengaturan Utama di Bawah Dashboard (Khusus Administrator) -->
+    <div class="ios-nav-section" id="navSectionSettings">
       <div class="ios-nav-card">
         <button class="tab" id="navSettingsBtn" onclick="switchTab('settings', this)">
           <span class="tab-left">
@@ -2885,8 +2912,8 @@
       </div>
     </div>
 
-    <!-- Grup 1: Panel Input Data -->
-    <div class="ios-nav-section">
+    <!-- Grup 1: Panel Input Data (Administrator & Petugas) -->
+    <div class="ios-nav-section" id="navSectionInput">
       <div class="ios-nav-header">Panel Input Data</div>
       <div class="ios-nav-card">
         <button class="tab" onclick="switchTab('perday', this)">
@@ -2896,7 +2923,7 @@
           </span>
           <span class="nav-chevron">›</span>
         </button>
-        <button class="tab" onclick="switchTab('potongan', this)">
+        <button class="tab" id="navPotonganBtn" onclick="switchTab('potongan', this)">
           <span class="tab-left">
             <span class="nav-icon" style="background:#ff9500;">🧾</span>
             <span class="tab-label">Potongan &amp; Tabungan</span>
@@ -2906,8 +2933,8 @@
       </div>
     </div>
 
-    <!-- Grup 2: Panel Laporan & Cetak PDF -->
-    <div class="ios-nav-section">
+    <!-- Grup 2: Panel Laporan & Cetak PDF (Administrator & Petugas) -->
+    <div class="ios-nav-section" id="navSectionReports">
       <div class="ios-nav-header">Panel Laporan &amp; PDF</div>
       <div class="ios-nav-card">
         <button class="tab" onclick="switchTab('rekap_bulanan', this)">
@@ -2956,12 +2983,12 @@
     </div>
 
     <!-- Grup 3: Slip Gaji PDF -->
-    <div class="ios-nav-section">
+    <div class="ios-nav-section" id="navSectionSlip">
       <div class="ios-nav-card">
-        <button class="tab" onclick="switchTab('slip', this)">
+        <button class="tab" id="navSlipBtn" onclick="switchTab('slip', this)">
           <span class="tab-left">
             <span class="nav-icon" style="background:#34c759;">📄</span>
-            <span class="tab-label">Slip Gaji (PDF)</span>
+            <span class="tab-label" id="navSlipLabel">Slip Gaji (PDF)</span>
           </span>
           <span class="nav-chevron">›</span>
         </button>
@@ -2969,7 +2996,7 @@
     </div>
 
     <!-- Grup 3B: Blangko Kosong Pencatatan Harian -->
-    <div class="ios-nav-section">
+    <div class="ios-nav-section" id="navSectionBlangko">
       <div class="ios-nav-card">
         <button class="tab" onclick="switchTab('blangko_kosong', this)">
           <span class="tab-left">
@@ -2981,9 +3008,9 @@
       </div>
     </div>
 
-    <!-- Grup 4: Sinkronisasi Cloud & Multi-Device di Paling Bawah Sidebar -->
-    <div class="ios-nav-section">
-      <div class="ios-nav-header">Akun, Cadangan &amp; Multi-Device</div>
+    <!-- Grup 4: Akun, Cadangan & Multi-Device di Paling Bawah Sidebar -->
+    <div class="ios-nav-section" id="navSectionAccount">
+      <div class="ios-nav-header" id="navAccountHeader">Akun, Cadangan &amp; Multi-Device</div>
       <div class="ios-nav-card">
         <button class="tab" id="navAccountBtn" onclick="switchTab('account_settings', this)">
           <span class="tab-left">
@@ -3179,7 +3206,7 @@ const INITIAL_USERS = [
   {
     id: 'usr_admin_1',
     username: 'ardhrm',
-    password: '123',
+    password: '777',
     fullName: 'ARIF DHARMA',
     role: 'Administrator',
     jabatan: 'Admin POS',
@@ -3247,15 +3274,21 @@ function normalizeUsersList(rawUsers) {
   if (!Array.isArray(rawUsers) || rawUsers.length === 0) {
     return JSON.parse(JSON.stringify(INITIAL_USERS));
   }
-  const normalized = rawUsers.map((u, idx) => ({
-    id: u.id || `usr_${Date.now()}_${idx}`,
-    username: String(u.username || `user${idx + 1}`).trim().toLowerCase(),
-    password: String(u.password || '123'),
-    fullName: String(u.fullName || u.username || `User ${idx + 1}`).trim(),
-    role: u.role === 'Administrator' ? 'Administrator' : 'Operator Pencatat',
-    jabatan: String(u.jabatan || (u.role === 'Administrator' ? 'Admin POS' : 'Petugas Pencatat')).trim(),
-    phone: String(u.phone || '').trim()
-  }));
+  const normalized = rawUsers.map((u, idx) => {
+    const validRole = ['Administrator', 'Operator Pencatat', 'Peternak'].includes(u.role)
+      ? u.role
+      : 'Operator Pencatat';
+    return {
+      id: u.id || `usr_${Date.now()}_${idx}`,
+      username: String(u.username || `user${idx + 1}`).trim().toLowerCase(),
+      password: validRole === 'Peternak' && u.password === undefined ? '' : String(u.password ?? '123'),
+      fullName: String(u.fullName || u.username || `User ${idx + 1}`).trim(),
+      role: validRole,
+      jabatan: String(u.jabatan || (validRole === 'Administrator' ? 'Admin POS' : validRole === 'Peternak' ? 'Anggota Peternak' : 'Petugas Pencatat')).trim(),
+      phone: String(u.phone || '').trim(),
+      farmerNo: u.farmerNo ? Number(u.farmerNo) : null
+    };
+  });
 
   // Pastikan admin utama ARIF DHARMA (@ardhrm) selalu terdaftar sebagai Administrator utama
   const primaryIdx = normalized.findIndex(u => u.id === 'usr_admin_1' || u.username === 'ardhrm');
@@ -3278,11 +3311,124 @@ function normalizeUsersList(rawUsers) {
   return normalized;
 }
 
+function getAllAuthAccounts() {
+  const staff = Array.isArray(state.users) ? state.users : [];
+  const farmerAccounts = (Array.isArray(state.farmers) ? state.farmers : []).map(f => {
+    const cleanName = String(f.nama || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const autoUsername = cleanName || `peternak${f.no}`;
+    const existingOverride = staff.find(u => u.role === 'Peternak' && Number(u.farmerNo) === Number(f.no));
+    if (existingOverride) {
+      return {
+        ...existingOverride,
+        fullName: f.nama,
+        farmerNo: Number(f.no),
+        no_anggota: f.no_anggota || ''
+      };
+    }
+    return {
+      id: `usr_farmer_${f.no}`,
+      username: autoUsername,
+      password: '',
+      fullName: f.nama,
+      role: 'Peternak',
+      jabatan: `Anggota #${f.no}${f.no_anggota ? ' (' + f.no_anggota + ')' : ''}`,
+      phone: '',
+      farmerNo: Number(f.no),
+      no_anggota: f.no_anggota || ''
+    };
+  });
+  return [...staff.filter(u => u.role !== 'Peternak'), ...farmerAccounts];
+}
+
 function getCurrentUser() {
   if (!Array.isArray(state.users) || state.users.length === 0) {
     state.users = normalizeUsersList(INITIAL_USERS);
   }
-  return state.users.find(u => u.id === state.currentUserId) || null;
+  if (!state.currentUserId) return null;
+  return getAllAuthAccounts().find(u => u.id === state.currentUserId) || null;
+}
+
+function getUserRolePermissions(user = getCurrentUser()) {
+  const role = user?.role || 'Peternak';
+  if (role === 'Administrator') {
+    return {
+      role,
+      canEditSettings: true,
+      canManageUsers: true,
+      canManageCloud: true,
+      canInputDaily: true,
+      canInputDed: true,
+      canViewAllReports: true,
+      canViewAllSlips: true,
+      allowedTabs: ['dashboard', 'settings', 'perday', 'potongan', 'rekap_bulanan', 'lap_bulanan', 'rekap_tabungan', 'p26_5', 'p6_15', 'p16_25', 'slip', 'blangko_kosong', 'account_settings', 'gdrive_settings']
+    };
+  }
+  if (role === 'Operator Pencatat') {
+    return {
+      role,
+      canEditSettings: false,
+      canManageUsers: false,
+      canManageCloud: false,
+      canInputDaily: true,
+      canInputDed: true,
+      canViewAllReports: true,
+      canViewAllSlips: true,
+      allowedTabs: ['dashboard', 'perday', 'potongan', 'rekap_bulanan', 'lap_bulanan', 'rekap_tabungan', 'p26_5', 'p6_15', 'p16_25', 'slip', 'blangko_kosong', 'account_settings']
+    };
+  }
+  // Role: Peternak
+  return {
+    role: 'Peternak',
+    canEditSettings: false,
+    canManageUsers: false,
+    canManageCloud: false,
+    canInputDaily: false,
+    canInputDed: false,
+    canViewAllReports: false,
+    canViewAllSlips: false,
+    allowedTabs: ['dashboard', 'slip', 'account_settings']
+  };
+}
+
+function applyRoleNavigationAccess() {
+  const user = getCurrentUser();
+  const perms = getUserRolePermissions(user);
+  const isFarmer = perms.role === 'Peternak';
+
+  const secSettings = document.getElementById('navSectionSettings');
+  const secInput = document.getElementById('navSectionInput');
+  const secReports = document.getElementById('navSectionReports');
+  const secBlangko = document.getElementById('navSectionBlangko');
+  const btnPotongan = document.getElementById('navPotonganBtn');
+  const btnGdrive = document.getElementById('navGdriveBtn');
+  const topSyncWrap = document.getElementById('topbarSyncWrap');
+  const lblDash = document.getElementById('navDashboardLabel');
+  const lblSlip = document.getElementById('navSlipLabel');
+  const hdrAcc = document.getElementById('navAccountHeader');
+
+  if (secSettings) secSettings.style.display = perms.canEditSettings ? 'flex' : 'none';
+  if (secInput) secInput.style.display = (perms.canInputDaily || perms.canInputDed) ? 'flex' : 'none';
+  if (btnPotongan) btnPotongan.style.display = perms.canInputDed ? 'flex' : 'none';
+  if (secReports) secReports.style.display = perms.canViewAllReports ? 'flex' : 'none';
+  if (secBlangko) secBlangko.style.display = perms.canViewAllReports ? 'flex' : 'none';
+  if (btnGdrive) btnGdrive.style.display = perms.canManageCloud ? 'flex' : 'none';
+  if (topSyncWrap) topSyncWrap.style.display = perms.canManageCloud ? 'inline-flex' : 'none';
+
+  if (lblDash) lblDash.textContent = isFarmer ? 'Ringkasan Setoran Saya' : 'Dashboard Utama';
+  if (lblSlip) lblSlip.textContent = isFarmer ? 'Slip Gaji Saya (PDF)' : 'Slip Gaji (PDF)';
+  if (hdrAcc) hdrAcc.textContent = isFarmer ? 'Akun Peternak' : (perms.canManageCloud ? 'Akun, Cadangan & Multi-Device' : 'Akun Petugas');
+
+  if (user && !perms.allowedTabs.includes(state.currentTab)) {
+    state.currentTab = 'dashboard';
+  }
+  if (isFarmer && user?.farmerNo) {
+    const fIdx = state.farmers.findIndex(f => Number(f.no) === Number(user.farmerNo));
+    if (fIdx >= 0) {
+      state.activeFarmerIdx = fIdx;
+      state.dashInspectFarmerIdx = fIdx;
+      state.selectedSlipFarmer = String(fIdx);
+    }
+  }
 }
 
 function getUserInitials(name) {
@@ -3300,7 +3446,7 @@ function renderAuthUI() {
 
   if (titleEl) titleEl.textContent = `POS ${state.config.pos_name || 'SAPI BALAP BARENG'}`;
   if (subEl) {
-    subEl.textContent = `Cooling Unit ${state.config.cooling_loc || 'BARENG'} • Masuk untuk mengelola setoran susu, potongan & laporan.`;
+    subEl.textContent = `Cooling Unit ${state.config.cooling_loc || 'BARENG'} • Administrator, Petugas, atau Peternak (sandi kosong).`;
   }
 
   if (!user && state.requireLogin !== false) {
@@ -3309,17 +3455,30 @@ function renderAuthUI() {
     if (loginScreen) loginScreen.classList.add('hidden');
   }
 
+  applyRoleNavigationAccess();
+
   const activeUser = user || state.users[0];
   if (activeUser) {
     const initials = getUserInitials(activeUser.fullName);
     const topAvatar = document.getElementById('topbarUserAvatar');
     const topName = document.getElementById('topbarUserName');
+    const popAvatar = document.getElementById('topbarUserPopAvatar');
+    const popFullName = document.getElementById('topbarUserPopFullName');
+    const popMeta = document.getElementById('topbarUserPopMeta');
     const sideAvatar = document.getElementById('sidebarUserAvatar');
     const sideName = document.getElementById('sidebarUserName');
     const sideRole = document.getElementById('sidebarUserRole');
 
     if (topAvatar) topAvatar.textContent = initials;
     if (topName) topName.textContent = activeUser.fullName;
+    if (popAvatar) popAvatar.textContent = initials;
+    if (popFullName) popFullName.textContent = activeUser.fullName;
+    if (popMeta) {
+      const roleInfo = activeUser.jabatan && activeUser.jabatan !== activeUser.role
+        ? `${activeUser.jabatan} (${activeUser.role})`
+        : activeUser.role;
+      popMeta.textContent = `@${activeUser.username} • ${roleInfo}`;
+    }
     if (sideAvatar) sideAvatar.textContent = initials;
     if (sideName) sideName.textContent = activeUser.fullName;
     if (sideRole) sideRole.textContent = `@${activeUser.username} • ${activeUser.jabatan || activeUser.role}`;
@@ -3345,15 +3504,25 @@ function toggleLoginPwdVisibility(btnEl) {
 
 function handleLoginSubmit(e) {
   if (e) e.preventDefault();
-  const uVal = String(document.getElementById('loginUsername')?.value || '').trim().toLowerCase();
+  const rawInput = String(document.getElementById('loginUsername')?.value || '').trim().toLowerCase();
   const pVal = String(document.getElementById('loginPassword')?.value || '');
   const remember = Boolean(document.getElementById('loginRememberMe')?.checked);
   const errEl = document.getElementById('loginErrorBox');
 
-  const matched = state.users.find(u => u.username.toLowerCase() === uVal && u.password === pVal);
+  const allAccounts = getAllAuthAccounts();
+  const matched = allAccounts.find(u => {
+    const uNameMatch = u.username.toLowerCase() === rawInput;
+    const fullNameMatch = u.role === 'Peternak' && String(u.fullName || '').trim().toLowerCase() === rawInput;
+    const memberNoMatch = u.role === 'Peternak' && (
+      String(u.farmerNo) === rawInput ||
+      (u.no_anggota && String(u.no_anggota).trim().toLowerCase() === rawInput)
+    );
+    return (uNameMatch || fullNameMatch || memberNoMatch) && String(u.password ?? '') === pVal;
+  });
+
   if (!matched) {
     if (errEl) {
-      errEl.textContent = '⚠️ Username atau kata sandi tidak sesuai. Silakan periksa kembali.';
+      errEl.textContent = '⚠️ Akun atau kata sandi tidak sesuai. (Peternak: masukkan nama/no. anggota dan kosongkan sandi jika belum diubah).';
       errEl.classList.add('show');
     }
     return;
@@ -3361,6 +3530,7 @@ function handleLoginSubmit(e) {
 
   if (errEl) errEl.classList.remove('show');
   state.currentUserId = matched.id;
+  state.currentTab = 'dashboard';
   if (remember) {
     safeStorageSet(AUTH_SESSION_KEY, matched.id);
   } else {
@@ -3372,11 +3542,12 @@ function handleLoginSubmit(e) {
 
   renderAuthUI();
   renderAll();
-  triggerSaveAnimation(`👋 Selamat datang, ${matched.fullName}`);
+  const roleLabel = matched.role === 'Administrator' ? 'Administrator' : (matched.role === 'Peternak' ? 'Peternak' : 'Petugas');
+  triggerSaveAnimation(`👋 Selamat datang, ${matched.fullName} (${roleLabel})`);
 
   // Otomatis memuat data JSON terbaru dari Google Drive setelah berhasil login
   if (String(state.config.gdrive_gas_url || '').trim()) {
-    pullFromGoogleDrive(false);
+    pullFromGoogleDrive(true);
   }
 }
 
@@ -3417,16 +3588,32 @@ function updateCurrentUserProfile() {
     showToast('⚠️ Nama lengkap dan username wajib diisi.');
     return;
   }
-  const duplicate = state.users.some(u => u.id !== user.id && u.username.toLowerCase() === username);
+  const duplicate = getAllAuthAccounts().some(u => u.id !== user.id && u.username.toLowerCase() === username);
   if (duplicate) {
     showToast('⚠️ Username sudah digunakan akun lain.');
     return;
   }
 
-  user.fullName = fullName;
-  user.username = username;
-  user.jabatan = jabatan;
-  user.phone = phone;
+  if (user.role === 'Peternak') {
+    const existingIdx = state.users.findIndex(u => u.id === user.id);
+    const updatedFarmerAcc = {
+      id: user.id,
+      username,
+      password: user.password ?? '',
+      fullName: user.fullName,
+      role: 'Peternak',
+      jabatan: user.jabatan,
+      phone,
+      farmerNo: user.farmerNo
+    };
+    if (existingIdx >= 0) state.users[existingIdx] = updatedFarmerAcc;
+    else state.users.push(updatedFarmerAcc);
+  } else {
+    user.fullName = fullName;
+    user.username = username;
+    user.jabatan = jabatan;
+    user.phone = phone;
+  }
 
   saveState();
   renderAuthUI();
@@ -3441,11 +3628,11 @@ function updateCurrentUserPassword() {
   const newPwd = String(document.getElementById('accNewPwd')?.value || '');
   const confirmPwd = String(document.getElementById('accConfirmPwd')?.value || '');
 
-  if (oldPwd !== user.password) {
+  if (oldPwd !== String(user.password ?? '')) {
     showToast('⚠️ Kata sandi lama tidak sesuai.');
     return;
   }
-  if (newPwd.length < 3) {
+  if (user.role !== 'Peternak' && newPwd.length < 3) {
     showToast('⚠️ Kata sandi baru minimal 3 karakter.');
     return;
   }
@@ -3454,10 +3641,27 @@ function updateCurrentUserPassword() {
     return;
   }
 
-  user.password = newPwd;
+  if (user.role === 'Peternak') {
+    const existingIdx = state.users.findIndex(u => u.id === user.id);
+    const updatedFarmerAcc = {
+      id: user.id,
+      username: user.username,
+      password: newPwd,
+      fullName: user.fullName,
+      role: 'Peternak',
+      jabatan: user.jabatan,
+      phone: user.phone || '',
+      farmerNo: user.farmerNo
+    };
+    if (existingIdx >= 0) state.users[existingIdx] = updatedFarmerAcc;
+    else state.users.push(updatedFarmerAcc);
+  } else {
+    user.password = newPwd;
+  }
+
   saveState();
   renderCurrentTab();
-  triggerSaveAnimation('🔐 Kata sandi akun berhasil diubah');
+  triggerSaveAnimation(newPwd === '' ? '🔓 Sandi dikosongkan (default peternak)' : '🔐 Kata sandi akun berhasil diubah');
 }
 
 function addNewUserAccount() {
@@ -3617,6 +3821,7 @@ function renderTopbarSyncIndicator() {
 
 function toggleTopbarSyncPopover(event) {
   if (event) event.stopPropagation();
+  closeTopbarUserPopover();
   const pop = document.getElementById('topbarSyncPopover');
   if (!pop) return;
   pop.classList.toggle('open');
@@ -3627,10 +3832,27 @@ function closeTopbarSyncPopover() {
   if (pop) pop.classList.remove('open');
 }
 
+function toggleTopbarUserPopover(event) {
+  if (event) event.stopPropagation();
+  closeTopbarSyncPopover();
+  const pop = document.getElementById('topbarUserPopover');
+  if (!pop) return;
+  pop.classList.toggle('open');
+}
+
+function closeTopbarUserPopover() {
+  const pop = document.getElementById('topbarUserPopover');
+  if (pop) pop.classList.remove('open');
+}
+
 document.addEventListener('click', (e) => {
-  const wrap = document.getElementById('topbarSyncWrap');
-  if (wrap && !wrap.contains(e.target)) {
+  const syncWrap = document.getElementById('topbarSyncWrap');
+  if (syncWrap && !syncWrap.contains(e.target)) {
     closeTopbarSyncPopover();
+  }
+  const userWrap = document.getElementById('topbarUserWrap');
+  if (userWrap && !userWrap.contains(e.target)) {
+    closeTopbarUserPopover();
   }
 });
 
@@ -3716,7 +3938,7 @@ function loadState() {
     }
 
     const savedSessionUserId = safeStorageGet(AUTH_SESSION_KEY);
-    if (savedSessionUserId && state.users.some(u => u.id === savedSessionUserId)) {
+    if (savedSessionUserId && getAllAuthAccounts().some(u => u.id === savedSessionUserId)) {
       state.currentUserId = savedSessionUserId;
     } else if (state.requireLogin === false && state.users[0]) {
       state.currentUserId = state.users[0].id;
@@ -3977,6 +4199,11 @@ function toggleSidebar() {
 }
 
 function switchTab(tabKey, btnEl = null, fromDash = false) {
+  const perms = getUserRolePermissions();
+  if (!perms.allowedTabs.includes(tabKey)) {
+    showToast('🔒 Anda tidak memiliki hak akses ke menu tersebut.');
+    return;
+  }
   state.currentTab = tabKey;
   state.fromDashboard = Boolean(fromDash);
   state.slipJumpOpen = false;
@@ -4696,40 +4923,69 @@ function handleDailyKeyNav(e, el) {
   }
 }
 
-function renderIosFarmerSelector({ curIdx, popoverOpen, searchQuery, alignLeft = false, onPrevExpr, onNextExpr, onToggleExpr, onSearchExpr, onSelectItemExpr }) {
-  const curF = state.farmers[curIdx] || { no: 1, nama: '-', no_anggota: '' };
+function triggerSmoothPanelAnim() {
+  const main = document.getElementById('mainContent');
+  if (!main) return;
+  main.classList.remove('tab-animate-enter');
+  void main.offsetWidth;
+  main.classList.add('tab-animate-enter');
+}
+
+function renderIosFarmerSelector({
+  curIdx,
+  popoverOpen,
+  searchQuery,
+  onPrevExpr,
+  onNextExpr,
+  onToggleExpr,
+  onSearchExpr,
+  onSelectItemExpr
+}) {
+  const maxNo = state.farmers.length || 1;
+  const safeIdx = Math.min(maxNo - 1, Math.max(0, Number(curIdx) || 0));
+  const curF = state.farmers[safeIdx] || { no: 1, nama: '-', no_anggota: '' };
   const q = String(searchQuery || '').trim().toLowerCase();
+
   const filtered = state.farmers
     .map((f, idx) => ({ f, idx }))
-    .filter(({ f }) => !q || String(f.nama || '').toLowerCase().includes(q) || String(f.no_anggota || '').toLowerCase().includes(q) || String(f.no) === q);
+    .filter(({ f }) =>
+      !q ||
+      String(f.nama || '').toLowerCase().includes(q) ||
+      String(f.no_anggota || '').toLowerCase().includes(q) ||
+      String(f.no) === q
+    );
 
   return `
     <div class="slip-jump-wrap">
       <div class="ios-inspect-nav">
-        <button type="button" class="ios-inspect-arrow" title="Peternak Sebelumnya" onclick="${onPrevExpr}">‹</button>
-        <button type="button" class="ios-inspect-trigger" title="#${curF.no} ${curF.nama}" onclick="${onToggleExpr}">
+        <button type="button" class="ios-inspect-arrow" title="Anggota Sebelumnya" onclick="${onPrevExpr}">‹</button>
+        <button type="button" class="ios-inspect-trigger" title="Klik untuk mencari anggota" onclick="${onToggleExpr}">
           <span class="farmer-no-accent">${curF.no}</span>
           <span class="ios-inspect-trigger-name">${curF.nama}</span>
-          <span style="font-size:10px; color:var(--muted); flex-shrink:0;">▾</span>
+          <span style="font-size:10px; color:var(--muted);">▾</span>
         </button>
-        <button type="button" class="ios-inspect-arrow" title="Peternak Berikutnya" onclick="${onNextExpr}">›</button>
+        <button type="button" class="ios-inspect-arrow" title="Anggota Berikutnya" onclick="${onNextExpr}">›</button>
       </div>
       ${popoverOpen ? `
-        <div class="ios-inspect-popover" style="${alignLeft ? 'left:0; right:auto;' : 'right:0; left:auto;'}">
+        <div class="ios-inspect-popover">
           <div class="ios-inspect-search-box">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.75"/><path d="M13 13l4.2 4.2" stroke-linecap="round"/></svg>
-            <input type="text" class="ios-inspect-search-input" placeholder="Cari nama / nomor..." value="${searchQuery || ''}" oninput="${onSearchExpr}">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="8.5" cy="8.5" r="5.75"></circle>
+              <path d="M13 13l4.2 4.2" stroke-linecap="round"></path>
+            </svg>
+            <input type="text" class="ios-inspect-search-input" value="${String(searchQuery || '').replace(/"/g, '&quot;')}"
+              placeholder="Cari nama / nomor..." oninput="${onSearchExpr}">
           </div>
           <div class="ios-inspect-list">
-            ${filtered.map(({ f, idx }) => `
-              <button type="button" class="slip-jump-item ${idx === curIdx ? 'active' : ''}" onclick="${onSelectItemExpr(idx)}">
-                <span style="display:flex; align-items:center; gap:8px; min-width:0;">
+            ${filtered.length > 0 ? filtered.map(({ f, idx }) => `
+              <button type="button" class="slip-jump-item ${idx === safeIdx ? 'active' : ''}" onclick="${onSelectItemExpr(idx)}">
+                <span style="display:flex; align-items:center; gap:7px; min-width:0;">
                   <span class="farmer-no-accent">${f.no}</span>
                   <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${f.nama}</span>
                 </span>
                 <span style="font-size:10.5px; opacity:0.75;">${f.no_anggota || ''}</span>
               </button>
-            `).join('') || `<div style="padding:10px; text-align:center; font-size:11.5px; color:var(--muted);">Tidak ditemukan</div>`}
+            `).join('') : `<div style="padding:10px; text-align:center; font-size:11.5px; color:var(--muted);">Tidak ditemukan</div>`}
           </div>
         </div>
       ` : ''}
@@ -4737,57 +4993,243 @@ function renderIosFarmerSelector({ curIdx, popoverOpen, searchQuery, alignLeft =
   `;
 }
 
-function renderCurrentTab(animateTransition = false) {
+function renderCurrentTab(animate = false) {
+  const tab = state.currentTab;
   const main = document.getElementById('mainContent');
   const toolbar = document.getElementById('mainToolbar');
   const extra = document.getElementById('extraToolbar');
   const searchWrap = document.getElementById('globalSearchWrap');
-  const hintBar = document.getElementById('keyboardHintBar');
   const topInspectSlot = document.getElementById('topInspectSlot');
+  const keyboardHintBar = document.getElementById('keyboardHintBar');
   if (!main || !toolbar || !extra) return;
 
-  if (topInspectSlot) topInspectSlot.innerHTML = '';
-
-  const triggerSmoothPanelAnim = () => {
-    if (!animateTransition) return;
-    main.classList.remove('tab-animate-enter');
-    void main.offsetWidth;
-    main.classList.add('tab-animate-enter');
-
-    if (toolbar.style.display !== 'none') {
-      toolbar.classList.remove('toolbar-animate-enter');
-      void toolbar.offsetWidth;
-      toolbar.classList.add('toolbar-animate-enter');
-    }
-  };
-
-  const tab = state.currentTab;
-  const q = String(document.getElementById('searchInput')?.value || '').trim().toLowerCase();
-  const list = state.farmers.filter(f =>
-    !q ||
-    String(f.nama || '').toLowerCase().includes(q) ||
-    String(f.no_anggota || '').toLowerCase().includes(q) ||
-    String(f.no) === q
-  );
-
   toolbar.style.display = 'flex';
+  extra.style.flex = '';
   extra.className = '';
   extra.innerHTML = '';
   if (searchWrap) searchWrap.style.display = 'inline-flex';
-  if (hintBar) {
-    hintBar.style.display = (tab === 'perday' || tab === 'potongan') ? 'block' : 'none';
+  if (topInspectSlot) topInspectSlot.innerHTML = '';
+  if (keyboardHintBar) {
+    keyboardHintBar.style.display = (tab === 'perday' || tab === 'potongan') ? 'block' : 'none';
   }
 
-  const backToDashBtnHtml = `<button type="button" class="btn btn-soft" onclick="switchTab('dashboard')">‹ Dashboard</button>`;
-  const sunIconSvg = `<svg class="ios-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M4.93 4.93l1.55 1.55M17.52 17.52l1.55 1.55M2.5 12h2.2M19.3 12h2.2M4.93 19.07l1.55-1.55M17.52 6.48l1.55-1.55" stroke-linecap="round"/></svg>`;
-  const moonIconSvg = `<svg class="ios-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.35 14.35A8.5 8.5 0 0 1 9.65 3.65a8.5 8.5 0 1 0 10.7 10.7Z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const query = String(document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+  const list = state.farmers.filter(f =>
+    !query ||
+    String(f.nama || '').toLowerCase().includes(query) ||
+    String(f.no_anggota || '').toLowerCase().includes(query) ||
+    String(f.no) === query
+  );
 
-  // 0A. DASHBOARD UTAMA
+  const backToDashBtnHtml = `<button type="button" class="btn btn-soft" onclick="switchTab('dashboard', null, false)">‹ Dashboard</button>`;
+  const sunIconSvg = `<svg class="ios-slot-icon" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="4"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6L16 16M16 4l-1.4 1.4M5.4 14.6L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  const moonIconSvg = `<svg class="ios-slot-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M15.8 13.2A6.8 6.8 0 0 1 6.8 4.2c0-.6.1-1.2.2-1.7A7.5 7.5 0 1 0 17.5 13c-.5.1-1.1.2-1.7.2z"/></svg>`;
+
+  // 0A. DASHBOARD UTAMA (BERBEDA SESUAI HAK AKSES: ADMIN, PETUGAS, ATAU PETERNAK)
   if (tab === 'dashboard') {
     updatePrintPageStyle('landscape', 'A4', '8mm');
     toolbar.style.display = 'none';
 
     const c = state.config;
+    const curUser = getCurrentUser();
+    const perms = getUserRolePermissions(curUser);
+
+    // TAMPILAN KHUSUS ROLE PETERNAK (HANYA DATA PRIBADI)
+    if (perms.role === 'Peternak') {
+      const myIdx = Math.max(0, state.farmers.findIndex(f => Number(f.no) === Number(curUser?.farmerNo)));
+      const myF = state.farmers[myIdx] || { no: 1, nama: curUser?.fullName || '-', no_anggota: '-', daily: Array(62).fill(0), ded: {} };
+      const myR = calcFarmer(myF);
+      const d = myF.ded || {};
+
+      // Statistik perbandingan dengan rata-rata anggota aktif POS
+      const allPosCalcs = state.farmers.map(f => calcFarmer(f));
+      const activePosCalcs = allPosCalcs.filter(r => r.totalLiter > 0);
+      const avgPosLiter = activePosCalcs.length > 0
+        ? activePosCalcs.reduce((sum, r) => sum + r.totalLiter, 0) / activePosCalcs.length
+        : 0;
+      const diffFromPosAvg = myR.totalLiter - avgPosLiter;
+      const diffPctPos = avgPosLiter > 0 ? ((diffFromPosAvg / avgPosLiter) * 100) : 0;
+
+      // Indikator rasio pakan vs penerimaan kotor
+      const pakanRatioPct = myR.gajiKotor > 0 ? ((myR.totalPakan / myR.gajiKotor) * 100) : (myR.totalPakan > 0 ? 100 : 0);
+      const pakanRatioStr = pakanRatioPct.toFixed(1).replace('.', ',');
+      const ratioColor = pakanRatioPct > 65 ? '#dc2626' : (pakanRatioPct > 45 ? '#d97706' : '#16a34a');
+      const ratioBg = pakanRatioPct > 65 ? 'rgba(220,38,38,0.12)' : (pakanRatioPct > 45 ? 'rgba(217,119,6,0.12)' : 'rgba(22,163,74,0.12)');
+      const ratioLabel = (myR.gajiKotor === 0 && myR.totalPakan === 0)
+        ? 'Belum Ada Transaksi'
+        : (pakanRatioPct > 65 ? 'Perlu Perhatian (Tinggi)' : (pakanRatioPct > 45 ? 'Cukup Terkendali (Moderat)' : 'Sangat Efisien'));
+
+      const myDailyCols = DAYS.map((dayNum, dIdx) => {
+        const p = Number(myF.daily[dIdx * 2]) || 0;
+        const s = Number(myF.daily[dIdx * 2 + 1]) || 0;
+        return { dayNum, p, s, tot: p + s };
+      });
+      const maxMyDay = Math.max(5, ...myDailyCols.map(item => item.tot));
+      const activeMyDays = myDailyCols.filter(item => item.tot > 0).length;
+      const consistencyPct = Math.round((activeMyDays / 31) * 100);
+      const avgMyDay = activeMyDays > 0 ? myR.totalLiter / activeMyDays : 0;
+
+      // Daftar rincian potongan aktif bulan ini
+      const activeDeductionList = [
+        { label: 'Konsentrat Khusus', qty: d.konsentrat ? `${fmtNum(d.konsentrat)} sak` : '', rp: myR.rpKonsentrat },
+        { label: 'Konsentrat Antar', qty: d.konsentrat_antar ? `${fmtNum(d.konsentrat_antar)} sak` : '', rp: myR.rpKonsentratAntar },
+        { label: 'Mineral Sapi', qty: d.mineral ? `${fmtNum(d.mineral)} bks` : '', rp: myR.rpMineral },
+        { label: 'Susu A', qty: d.susu_a ? `${fmtNum(d.susu_a)} kg` : '', rp: myR.rpSusuA },
+        { label: 'DDGS', qty: d.ddgs ? `${fmtNum(d.ddgs)} kg` : '', rp: myR.rpDdgs },
+        { label: 'Susu Skim', qty: d.skim ? `${fmtNum(d.skim)} kg` : '', rp: myR.rpSkim },
+        { label: 'Obat Cacing', qty: d.obat_cacing ? `${fmtNum(d.obat_cacing)} bks` : '', rp: myR.rpObatCacing },
+        ...(myR.customPakanDetails || []).map(cp => ({ label: cp.name, qty: cp.qty ? `${fmtNum(cp.qty)} ${cp.unit.toLowerCase()}` : '', rp: cp.rp })),
+        { label: 'Karpet', qty: '', rp: myR.rpKarpet },
+        { label: 'Angsuran', qty: '', rp: myR.rpAngsuran },
+        { label: 'Min Bulan Lalu', qty: '', rp: myR.rpMinLalu },
+        { label: 'Angsuran BRI', qty: '', rp: myR.rpBri },
+        { label: 'Bon', qty: '', rp: myR.rpBon },
+        { label: 'Lain-Lain', qty: '', rp: myR.rpLain },
+        { label: 'Arisan', qty: '', rp: myR.rpArisan },
+        ...(myR.customRpDetails || []).map(cr => ({ label: cr.name, qty: '', rp: cr.rp }))
+      ].filter(item => item.rp > 0);
+
+      const myBarsHtml = myDailyCols.map(item => {
+        const hPct = Math.round((item.tot / maxMyDay) * 100);
+        return `
+          <div style="flex:1; min-width:16px; display:flex; flex-direction:column; align-items:center; gap:4px;" title="Tgl ${item.dayNum}: Pagi ${fmtNum(item.p)} L, Sore ${fmtNum(item.s)} L (Total ${fmtNum(item.tot)} L)">
+            <div style="font-size:9px; font-weight:700; color:${item.tot > 0 ? 'var(--accent)' : 'transparent'};">${item.tot > 0 ? fmtNum(item.tot) : '0'}</div>
+            <div style="width:100%; height:96px; background:rgba(148,163,184,0.14); border-radius:6px; display:flex; align-items:flex-end; overflow:hidden;">
+              <div style="width:100%; height:${hPct}%; background:linear-gradient(180deg, #38bdf8 0%, #007aff 100%); border-radius:6px;"></div>
+            </div>
+            <div style="font-size:9.5px; font-weight:700; color:var(--muted);">${item.dayNum}</div>
+          </div>
+        `;
+      }).join('');
+
+      main.innerHTML = `
+        <div class="tab-animate-enter">
+          <div class="dash-hero">
+            <div>
+              <h2>Halo, ${myF.nama} (#${myF.no})</h2>
+              <p>${c.pos_name} • No. Anggota: ${myF.no_anggota || '-'} • Periode ${getPeriodLabel()} • Harga Susu ${fmtRp(c.harga_susu)}/L</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="button" class="btn" style="background:#ffffff; color:#007aff;"
+                onclick="state.selectedSlipFarmer = '${myIdx}'; switchTab('slip', null, true);">📄 Lihat &amp; Cetak Slip Gaji Saya</button>
+              <button type="button" class="btn" style="background:rgba(255,255,255,0.2); color:#ffffff;"
+                onclick="switchTab('account_settings', null, true);">👤 Info Akun Saya</button>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="card">
+              <div class="label">Total Setoran Susu Saya</div>
+              <div class="val" style="color:var(--accent);">${fmtNum(myR.totalLiter)} L</div>
+              <div class="sub">Dibayar: ${fmtNum(myR.displayLiter)} L • Tabungan: ${fmtNum(myR.tabunganLiter)} L</div>
+            </div>
+            <div class="card">
+              <div class="label">Penerimaan Kotor</div>
+              <div class="val">${fmtRp(myR.gajiKotor)}</div>
+              <div class="sub">Rata-rata ${fmtNum(avgMyDay)} L / hari aktif</div>
+            </div>
+            <div class="card">
+              <div class="label">Total Potongan &amp; Pakan</div>
+              <div class="val" style="color:#b45309;">${fmtRp(myR.totalPotongan)}</div>
+              <div class="sub">Pakan: ${fmtRp(myR.totalPakan)} • Lainnya: ${fmtRp(Math.max(0, myR.totalPotongan - myR.totalPakan))}</div>
+            </div>
+            <div class="card">
+              <div class="label">Penerimaan Bersih</div>
+              <div class="val ${myR.gajiBersih < 0 ? 'neg' : 'pos'}">${fmtRp(myR.gajiBersih)}</div>
+              <div class="sub">Saldo Tabungan Susu: ${fmtRp(myR.tabunganRp)}</div>
+            </div>
+          </div>
+
+          <div class="dash-card" style="margin-bottom:16px;">
+            <div class="dash-card-header">
+              <div>
+                <h3 class="dash-card-title">📊 Grafik Setoran Harian Saya (Tanggal 26 – 25)</h3>
+                <span class="dash-card-sub">Aktif menyetor ${activeMyDays} dari 31 hari • Klik tombol Slip Gaji untuk rincian Pagi/Sore &amp; Potongan</span>
+              </div>
+              <span class="dash-badge-pill" style="background:rgba(0,122,255,0.12); color:var(--accent);">Akun Peternak (Baca Saja)</span>
+            </div>
+            <div style="overflow-x:auto; padding-top:6px;">
+              <div style="display:flex; align-items:flex-end; gap:5px; min-width:640px;">
+                ${myBarsHtml}
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-grid-2">
+            <!-- Kartu Inspeksi Kesehatan Usaha & Rasio Pakan -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <div>
+                  <h3 class="dash-card-title">🩺 Inspeksi Kesehatan Usaha &amp; Rasio Pakan</h3>
+                  <span class="dash-card-sub">Evaluasi efisiensi pakan, produktivitas &amp; konsistensi setoran</span>
+                </div>
+                <span class="dash-badge-pill" style="background:${ratioBg}; color:${ratioColor};">${ratioLabel}</span>
+              </div>
+
+              <div style="background:var(--bg); border:1px solid rgba(60,60,67,0.08); border-radius:12px; padding:11px 13px; margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+                  <span style="font-size:12px; font-weight:700; color:var(--text);">🌾 Porsi Biaya Pakan vs Penerimaan Kotor</span>
+                  <strong style="font-size:13.5px; color:${ratioColor};">${pakanRatioStr}%</strong>
+                </div>
+                <div style="width:100%; height:8px; background:rgba(15,23,42,0.08); border-radius:9999px; overflow:hidden; margin-bottom:7px;">
+                  <div style="width:${Math.min(100, Math.max(0, pakanRatioPct))}%; height:100%; background:${ratioColor}; border-radius:9999px; transition:width 0.35s ease;"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted);">
+                  <span>Biaya Pakan: <strong style="color:var(--text);">${fmtRp(myR.totalPakan)}</strong></span>
+                  <span>Sisa Non-Pakan: <strong style="color:var(--text);">${fmtRp(Math.max(0, myR.gajiKotor - myR.totalPakan))}</strong></span>
+                </div>
+              </div>
+
+              <div class="dash-alert-pill">
+                <span>⚖️ Perbandingan vs Rata-rata POS (${fmtNum(avgPosLiter)} L)</span>
+                <strong style="color:${diffFromPosAvg >= 0 ? 'var(--success-dark)' : '#b45309'};">
+                  ${diffFromPosAvg >= 0 ? '+' : ''}${fmtNum(diffFromPosAvg)} L (${diffPctPos >= 0 ? '+' : ''}${diffPctPos.toFixed(1)}%)
+                </strong>
+              </div>
+              <div class="dash-alert-pill">
+                <span>📅 Konsistensi Hari Setor</span>
+                <strong style="color:var(--accent);">${activeMyDays} / 31 Hari (${consistencyPct}%)</strong>
+              </div>
+              <div class="dash-alert-pill">
+                <span>💰 Akumulasi Tabungan Susu Bulan Ini</span>
+                <strong style="color:var(--success-dark);">${fmtNum(myR.tabunganLiter)} L (${fmtRp(myR.tabunganRp)})</strong>
+              </div>
+            </div>
+
+            <!-- Kartu Inspeksi Rincian Potongan Bulan Ini -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <div>
+                  <h3 class="dash-card-title">🧾 Inspeksi Rincian Potongan Bulan Ini</h3>
+                  <span class="dash-card-sub">Daftar potongan pakan, sapronak &amp; angsuran tercatat</span>
+                </div>
+                <span class="dash-badge-pill" style="background:rgba(245,158,11,0.14); color:#b45309;">${activeDeductionList.length} Item</span>
+              </div>
+              ${activeDeductionList.length > 0 ? `
+                <div style="display:flex; flex-direction:column; gap:7px; max-height:220px; overflow-y:auto;">
+                  ${activeDeductionList.map(item => `
+                    <div class="dash-alert-pill" style="margin-bottom:0;">
+                      <div>
+                        <span style="font-weight:600; color:var(--text);">${item.label}</span>
+                        ${item.qty ? `<span style="font-size:11px; color:var(--muted); margin-left:6px;">(${item.qty})</span>` : ''}
+                      </div>
+                      <strong style="color:#b45309;">${fmtRp(item.rp)}</strong>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : `
+                <div style="padding:18px 12px; text-align:center; background:var(--bg); border-radius:12px; font-size:12px; color:var(--muted);">
+                  ✨ Tidak ada potongan pakan atau angsuran pada periode ini.
+                </div>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+      triggerSmoothPanelAnim();
+      return;
+    }
+
     const calcs = state.farmers.map((f, idx) => ({ f, idx, r: calcFarmer(f) }));
     const totLiter = calcs.reduce((a, x) => a + x.r.totalLiter, 0);
     const activeFarmers = calcs.filter(x => x.r.totalLiter > 0);
@@ -5030,20 +5472,22 @@ function renderCurrentTab(animateTransition = false) {
             <p>Periode Buku ${getPeriodLabel()} • Harga Susu ${fmtRp(c.harga_susu)}/Liter • ${activeCount}/${maxNo} Anggota Aktif Setor</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button type="button" class="btn" style="background:#ffffff; color:#007aff;" onclick="switchTab('perday', null, true)">🥛 Input Harian</button>
+            ${perms.canInputDaily ? `<button type="button" class="btn" style="background:#ffffff; color:#007aff;" onclick="switchTab('perday', null, true)">🥛 Input Harian</button>` : ''}
             <button type="button" class="btn" style="background:rgba(255,255,255,0.2); color:#ffffff;" onclick="switchTab('slip', null, true)">📄 Slip Gaji</button>
           </div>
         </div>
 
         <div class="dash-quick-grid">
+          ${perms.canInputDaily ? `
           <button type="button" class="dash-quick-btn" onclick="switchTab('perday', null, true)">
             <span class="nav-icon" style="background:#34c759;">🥛</span>
             <div><div style="font-weight:700; font-size:12.5px;">Input Harian</div><div style="font-size:11px; color:var(--muted);">Setoran Pagi &amp; Sore</div></div>
-          </button>
+          </button>` : ''}
+          ${perms.canInputDed ? `
           <button type="button" class="dash-quick-btn" onclick="switchTab('potongan', null, true)">
             <span class="nav-icon" style="background:#ff9500;">🧾</span>
             <div><div style="font-weight:700; font-size:12.5px;">Input Potongan</div><div style="font-size:11px; color:var(--muted);">Pakan, BRI &amp; Tabungan</div></div>
-          </button>
+          </button>` : ''}
           <button type="button" class="dash-quick-btn" onclick="switchTab('rekap_bulanan', null, true)">
             <span class="nav-icon" style="background:#5856d6;">📊</span>
             <div><div style="font-weight:700; font-size:12.5px;">Rekap Bulanan</div><div style="font-size:11px; color:var(--muted);">Rincian Lengkap POS</div></div>
@@ -5448,13 +5892,19 @@ function renderCurrentTab(animateTransition = false) {
     toolbar.style.display = 'none';
     const curUser = getCurrentUser() || state.users[0];
     const isAdmin = curUser && curUser.role === 'Administrator';
+    const isFarmer = curUser && curUser.role === 'Peternak';
+    const roleDescMap = {
+      'Administrator': 'Akses Penuh: Pengaturan Harga & Peternak, Input Harian, Input Potongan, Seluruh Laporan, Slip Gaji, Manajemen User & Cloud Sync.',
+      'Operator Pencatat': 'Akses Petugas: Input Setoran Harian (Pagi/Sore), Melihat Laporan Harian/Rekap, Cetak Blangko & Slip Gaji (Tanpa ubah harga/potongan/user).',
+      'Peternak': 'Akses Anggota: Melihat ringkasan setoran susu pribadi, rincian potongan pribadi, serta mencetak Slip Gaji milik sendiri.'
+    };
 
     main.innerHTML = `
       <div class="tab-animate-enter">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
           <div>
-            <h2 style="margin:0; font-size:17px;">👤 Setting Account User &amp; Keamanan</h2>
-            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Kelola profil petugas aktif, ubah kata sandi, dan atur hak akses akun pengguna POS.</p>
+            <h2 style="margin:0; font-size:17px;">👤 Setting Account User &amp; Hak Akses</h2>
+            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Kelola profil akun aktif, kata sandi, dan pembagian hak akses Administrator, Petugas, &amp; Peternak.</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button type="button" class="btn btn-danger" onclick="askLogoutUser()">🚪 Keluar / Kunci Layar</button>
@@ -5470,12 +5920,13 @@ function renderCurrentTab(animateTransition = false) {
                 <h3 style="margin:0; font-size:17px; font-weight:800;">${curUser.fullName}</h3>
                 <span class="role-badge-pill ${isAdmin ? 'is-admin' : 'is-operator'}" style="background:rgba(255,255,255,0.16); color:#ffffff;">${curUser.role}</span>
               </div>
-              <div style="font-size:12px; opacity:0.82; margin-top:3px;">Username: <strong>@${curUser.username}</strong> • Jabatan: ${curUser.jabatan || '-'}</div>
+              <div style="font-size:12px; opacity:0.82; margin-top:3px;">Username: <strong>@${curUser.username}</strong> • ${curUser.jabatan || '-'}</div>
+              <div style="font-size:11px; opacity:0.75; margin-top:4px;">🛡️ ${roleDescMap[curUser.role] || ''}</div>
             </div>
           </div>
           <div style="font-size:11.5px; opacity:0.85; text-align:right;">
             <div>Unit POS: <strong>${state.config.pos_name}</strong></div>
-            <div>Total Akun Terdaftar: <strong>${state.users.length} User</strong></div>
+            <div>Sandi Peternak: <strong>Default Kosong</strong></div>
           </div>
         </div>
 
@@ -5485,15 +5936,15 @@ function renderCurrentTab(animateTransition = false) {
             <div class="ios-grouped-list">
               <div class="ios-list-row">
                 <div class="ios-row-left"><span class="ios-icon-badge" style="background:#007aff;">🪪</span><div><div class="ios-row-title">Nama Lengkap</div></div></div>
-                <div class="ios-row-input-wrap"><input type="text" id="accFullName" class="ios-row-input text-val" value="${curUser.fullName}"></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accFullName" class="ios-row-input text-val" value="${curUser.fullName}" ${isFarmer ? 'readonly style="opacity:0.7;"' : ''}></div>
               </div>
               <div class="ios-list-row">
                 <div class="ios-row-left"><span class="ios-icon-badge" style="background:#5856d6;">@</span><div><div class="ios-row-title">Username Login</div></div></div>
                 <div class="ios-row-input-wrap"><input type="text" id="accUsername" class="ios-row-input text-val" value="${curUser.username}"></div>
               </div>
               <div class="ios-list-row">
-                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#34c759;">💼</span><div><div class="ios-row-title">Jabatan di POS</div></div></div>
-                <div class="ios-row-input-wrap"><input type="text" id="accJabatan" class="ios-row-input text-val" value="${curUser.jabatan || ''}" placeholder="Admin / Pencatat"></div>
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#34c759;">💼</span><div><div class="ios-row-title">Jabatan / Status</div></div></div>
+                <div class="ios-row-input-wrap"><input type="text" id="accJabatan" class="ios-row-input text-val" value="${curUser.jabatan || ''}" ${isFarmer ? 'readonly style="opacity:0.7;"' : 'placeholder="Admin / Pencatat"'}></div>
               </div>
               <div class="ios-list-row">
                 <div class="ios-row-left"><span class="ios-icon-badge" style="background:#32ade6;">📱</span><div><div class="ios-row-title">No. HP / WhatsApp</div></div></div>
@@ -5507,12 +5958,12 @@ function renderCurrentTab(animateTransition = false) {
             <div class="ios-section-header">Ubah Kata Sandi / PIN</div>
             <div class="ios-grouped-list">
               <div class="ios-list-row">
-                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#8e8e93;">🔑</span><div><div class="ios-row-title">Kata Sandi Lama</div></div></div>
-                <div class="ios-row-input-wrap"><input type="password" id="accOldPwd" class="ios-row-input text-val" placeholder="••••••"></div>
+                <div class="ios-row-left"><span class="ios-icon-badge" style="background:#8e8e93;">🔑</span><div><div class="ios-row-title">Kata Sandi Lama</div><div class="ios-row-sub">${isFarmer ? 'Biarkan kosong jika belum pernah diubah' : 'Masukkan sandi saat ini'}</div></div></div>
+                <div class="ios-row-input-wrap"><input type="password" id="accOldPwd" class="ios-row-input text-val" placeholder="${isFarmer ? '(Kosong)' : '••••••'}"></div>
               </div>
               <div class="ios-list-row">
                 <div class="ios-row-left"><span class="ios-icon-badge" style="background:#ff9500;">🛡️</span><div><div class="ios-row-title">Kata Sandi Baru</div></div></div>
-                <div class="ios-row-input-wrap"><input type="password" id="accNewPwd" class="ios-row-input text-val" placeholder="Min. 3 karakter"></div>
+                <div class="ios-row-input-wrap"><input type="password" id="accNewPwd" class="ios-row-input text-val" placeholder="${isFarmer ? 'Isi PIN baru atau kosongkan' : 'Min. 3 karakter'}"></div>
               </div>
               <div class="ios-list-row">
                 <div class="ios-row-left"><span class="ios-icon-badge" style="background:#34c759;">✓</span><div><div class="ios-row-title">Konfirmasi Sandi Baru</div></div></div>
@@ -5525,74 +5976,109 @@ function renderCurrentTab(animateTransition = false) {
           </div>
 
           <div>
-            <div class="ios-section-header">Keamanan Akses Aplikasi</div>
+            ${!isFarmer ? `
+              <div class="ios-section-header">Keamanan Akses Aplikasi</div>
+              <div class="ios-grouped-list">
+                <div class="ios-list-row">
+                  <div class="ios-row-left">
+                    <span class="ios-icon-badge" style="background:#ff3b30;">🔒</span>
+                    <div>
+                      <div class="ios-row-title">Wajibkan Login Saat Buka Aplikasi</div>
+                      <div class="ios-row-sub">Tampilkan halaman login jika sesi belum tersimpan</div>
+                    </div>
+                  </div>
+                  <label class="ios-toggle-switch">
+                    <input type="checkbox" ${state.requireLogin !== false ? 'checked' : ''} onchange="toggleRequireLoginSetting(this.checked)">
+                    <span class="ios-toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="ios-section-header">Matriks Hak Akses 3 Peran Pengguna</div>
             <div class="ios-grouped-list">
               <div class="ios-list-row">
                 <div class="ios-row-left">
-                  <span class="ios-icon-badge" style="background:#ff3b30;">🔒</span>
+                  <span class="ios-icon-badge" style="background:#007aff;">👑</span>
                   <div>
-                    <div class="ios-row-title">Wajibkan Login Saat Buka Aplikasi</div>
-                    <div class="ios-row-sub">Tampilkan halaman login jika sesi belum tersimpan</div>
+                    <div class="ios-row-title">Administrator</div>
+                    <div class="ios-row-sub">Kontrol penuh: Harga, Peternak, Input Harian &amp; Potongan, Semua Laporan, Slip, Cloud Sync &amp; User.</div>
                   </div>
                 </div>
-                <label class="ios-toggle-switch">
-                  <input type="checkbox" ${state.requireLogin !== false ? 'checked' : ''} onchange="toggleRequireLoginSetting(this.checked)">
-                  <span class="ios-toggle-slider"></span>
-                </label>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#34c759;">📋</span>
+                  <div>
+                    <div class="ios-row-title">Petugas (Operator Pencatat)</div>
+                    <div class="ios-row-sub">Input Setoran Harian (Pagi/Sore), Input Potongan &amp; Tabungan, Laporan &amp; Slip Gaji (Tanpa pengaturan harga, cloud sync, &amp; manajemen user).</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ios-list-row">
+                <div class="ios-row-left">
+                  <span class="ios-icon-badge" style="background:#ff9500;">🐄</span>
+                  <div>
+                    <div class="ios-row-title">Peternak (Anggota POS)</div>
+                    <div class="ios-row-sub">Login dengan nama/username atau no. anggota &amp; <strong>sandi default kosong</strong>. Hanya melihat &amp; cetak data/slip pribadi.</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="ios-section-header">Daftar Akun Pengguna POS (${state.users.length})</div>
-            ${isAdmin ? `
-              <div class="ios-add-card">
-                <div style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:8px;">+ Tambah Akun Petugas / Admin Baru</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-                  <input type="text" id="newAccFullName" class="ios-pill-input" placeholder="Nama lengkap petugas...">
-                  <input type="text" id="newAccUsername" class="ios-pill-input" placeholder="Username (tanpa spasi)">
+            ${!isFarmer ? `
+              <div class="ios-section-header">Daftar Akun Staf POS (${state.users.filter(u => u.role !== 'Peternak').length})</div>
+              ${isAdmin ? `
+                <div class="ios-add-card">
+                  <div style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:8px;">+ Tambah Akun Petugas / Admin Baru</div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                    <input type="text" id="newAccFullName" class="ios-pill-input" placeholder="Nama lengkap petugas...">
+                    <input type="text" id="newAccUsername" class="ios-pill-input" placeholder="Username (tanpa spasi)">
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;">
+                    <input type="password" id="newAccPassword" class="ios-pill-input" placeholder="Kata sandi / PIN">
+                    <select id="newAccRole" class="ios-pill-input">
+                      <option value="Operator Pencatat">Operator Pencatat</option>
+                      <option value="Administrator">Administrator</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" onclick="addNewUserAccount()">+ Tambah</button>
+                  </div>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;">
-                  <input type="password" id="newAccPassword" class="ios-pill-input" placeholder="Kata sandi / PIN">
-                  <select id="newAccRole" class="ios-pill-input">
-                    <option value="Operator Pencatat">Operator Pencatat</option>
-                    <option value="Administrator">Administrator</option>
-                  </select>
-                  <button type="button" class="btn btn-primary" onclick="addNewUserAccount()">+ Tambah</button>
+              ` : `
+                <div class="ios-add-card" style="font-size:12px; color:var(--muted);">
+                  ℹ️ Anda masuk sebagai <strong>Operator Pencatat</strong>. Penambahan atau penghapusan akun lain hanya dapat dilakukan oleh Administrator.
                 </div>
-              </div>
-            ` : `
-              <div class="ios-add-card" style="font-size:12px; color:var(--muted);">
-                ℹ️ Anda masuk sebagai <strong>Operator Pencatat</strong>. Penambahan atau penghapusan akun lain hanya dapat dilakukan oleh Administrator.
-              </div>
-            `}
+              `}
 
-            <div class="ios-grouped-list">
-              ${state.users.map(u => {
-                const isSelf = u.id === curUser.id;
-                const uIsAdmin = u.role === 'Administrator';
-                const isProtectedMainAdmin = u.id === 'usr_admin_1';
-                return `
-                  <div class="ios-list-row">
-                    <div class="ios-row-left">
-                      <span class="user-avatar-circle" style="width:32px; height:32px;">${getUserInitials(u.fullName)}</span>
-                      <div>
-                        <div class="ios-row-title" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                          <span>${u.fullName}</span>
-                          ${isProtectedMainAdmin ? `<span style="font-size:10px; background:rgba(0,122,255,0.12); color:var(--accent); padding:2px 7px; border-radius:999px; font-weight:700;">Admin Utama</span>` : ''}
-                          ${isSelf ? `<span style="font-size:10px; background:var(--fill); color:var(--muted); padding:2px 7px; border-radius:999px; font-weight:700;">Anda</span>` : ''}
+              <div class="ios-grouped-list">
+                ${state.users.filter(u => u.role !== 'Peternak').map(u => {
+                  const isSelf = u.id === curUser.id;
+                  const uIsAdmin = u.role === 'Administrator';
+                  const isProtectedMainAdmin = u.id === 'usr_admin_1';
+                  return `
+                    <div class="ios-list-row">
+                      <div class="ios-row-left">
+                        <span class="user-avatar-circle" style="width:32px; height:32px;">${getUserInitials(u.fullName)}</span>
+                        <div>
+                          <div class="ios-row-title" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                            <span>${u.fullName}</span>
+                            ${isProtectedMainAdmin ? `<span style="font-size:10px; background:rgba(0,122,255,0.12); color:var(--accent); padding:2px 7px; border-radius:999px; font-weight:700;">Admin Utama</span>` : ''}
+                            ${isSelf ? `<span style="font-size:10px; background:var(--fill); color:var(--muted); padding:2px 7px; border-radius:999px; font-weight:700;">Anda</span>` : ''}
+                          </div>
+                          <div class="ios-row-sub">@${u.username} • ${u.jabatan || u.role}</div>
                         </div>
-                        <div class="ios-row-sub">@${u.username} • ${u.jabatan || u.role}</div>
+                      </div>
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="role-badge-pill ${uIsAdmin ? 'is-admin' : 'is-operator'}">${uIsAdmin ? 'Admin' : 'Petugas'}</span>
+                        ${(isAdmin && !isSelf && !isProtectedMainAdmin) ? `
+                          <button type="button" class="btn btn-danger" style="height:30px; padding:0 10px; font-size:11px;" onclick="askDeleteUserAccount('${u.id}')">Hapus</button>
+                        ` : ''}
                       </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                      <span class="role-badge-pill ${uIsAdmin ? 'is-admin' : 'is-operator'}">${uIsAdmin ? 'Admin' : 'Petugas'}</span>
-                      ${(isAdmin && !isSelf && !isProtectedMainAdmin) ? `
-                        <button type="button" class="btn btn-danger" style="height:30px; padding:0 10px; font-size:11px;" onclick="askDeleteUserAccount('${u.id}')">Hapus</button>
-                      ` : ''}
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
           </div>
         </div>
       </div>
@@ -6438,7 +6924,14 @@ function renderCurrentTab(animateTransition = false) {
     extra.className = 'is-slip-toolbar';
 
     const c = state.config;
+    const curUser = getCurrentUser();
+    const perms = getUserRolePermissions(curUser);
+    const isFarmerRole = perms.role === 'Peternak';
     const maxNo = state.farmers.length || 1;
+    if (isFarmerRole && curUser?.farmerNo) {
+      const ownIdx = state.farmers.findIndex(f => Number(f.no) === Number(curUser.farmerNo));
+      if (ownIdx >= 0) state.selectedSlipFarmer = String(ownIdx);
+    }
     const isSingle = state.selectedSlipFarmer !== 'ALL' && state.selectedSlipFarmer !== 'RANGE';
     const curIdx = isSingle ? Math.min(maxNo - 1, Math.max(0, Number(state.selectedSlipFarmer) || 0)) : 0;
     const rStart = Math.max(1, Math.min(maxNo, Number(state.slipRangeStart) || 1));
@@ -6455,9 +6948,14 @@ function renderCurrentTab(animateTransition = false) {
           <div class="slip-group-box">
             <div class="slip-group-title">
               <span>1. Target Slip Peternak</span>
-              <span>${maxNo} Anggota</span>
+              <span>${isFarmerRole ? 'Akun Pribadi' : maxNo + ' Anggota'}</span>
             </div>
             <div class="slip-group-body">
+              ${isFarmerRole ? `
+                <div class="slip-meta-caption" style="font-size:12px; color:var(--primary); font-weight:700;">
+                  <span>👤 #${state.farmers[curIdx]?.no || '-'} ${state.farmers[curIdx]?.nama || '-'}</span>
+                </div>
+              ` : `
               <div class="slip-segmented-row">
                 <button type="button" class="pill-btn ${state.selectedSlipFarmer === 'ALL' ? 'active' : ''}"
                   onclick="state.slipJumpOpen=false; state.selectedSlipFarmer='ALL'; renderCurrentTab();">Semua (${maxNo})</button>
@@ -6466,35 +6964,6 @@ function renderCurrentTab(animateTransition = false) {
                 <button type="button" class="pill-btn ${isSingle ? 'active' : ''}"
                   onclick="state.slipJumpOpen=false; state.selectedSlipFarmer=String(${curIdx}); renderCurrentTab();">Per Orang</button>
               </div>
-
-              ${state.selectedSlipFarmer === 'RANGE' ? `
-                <div class="slip-range-bar">
-                  <span style="color:var(--muted);">Cetak Nomor</span>
-                  <div style="display:inline-flex; align-items:center; gap:6px;">
-                    <input type="number" class="slip-range-input" min="1" max="${maxNo}" value="${rStart}"
-                      onchange="state.slipRangeStart = Math.max(1, Math.min(${maxNo}, Number(this.value)||1)); if(state.slipRangeEnd < state.slipRangeStart) state.slipRangeEnd = state.slipRangeStart; renderCurrentTab();">
-                    <span>s/d</span>
-                    <input type="number" class="slip-range-input" min="1" max="${maxNo}" value="${rEnd}"
-                      onchange="state.slipRangeEnd = Math.max(1, Math.min(${maxNo}, Number(this.value)||${maxNo})); if(state.slipRangeStart > state.slipRangeEnd) state.slipRangeStart = state.slipRangeEnd; renderCurrentTab();">
-                  </div>
-                </div>
-              ` : isSingle ? `
-                <div style="display:flex; justify-content:center;">
-                  ${renderIosFarmerSelector({
-                    curIdx,
-                    popoverOpen: state.slipJumpOpen,
-                    searchQuery: state.slipSearch,
-                    onPrevExpr: `state.slipJumpOpen=false; state.selectedSlipFarmer = String((${curIdx} - 1 + ${maxNo}) % ${maxNo}); renderCurrentTab();`,
-                    onNextExpr: `state.slipJumpOpen=false; state.selectedSlipFarmer = String((${curIdx} + 1) % ${maxNo}); renderCurrentTab();`,
-                    onToggleExpr: `state.slipJumpOpen = !state.slipJumpOpen; renderCurrentTab();`,
-                    onSearchExpr: `state.slipSearch = this.value; renderCurrentTab(); setTimeout(() => { const el = document.querySelector('.ios-inspect-search-input'); if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 10);`,
-                    onSelectItemExpr: (idx) => `state.selectedSlipFarmer='${idx}'; state.slipJumpOpen=false; state.slipSearch=''; renderCurrentTab();`
-                  })}
-                </div>
-              ` : `
-                <div class="slip-meta-caption">
-                  <span>Menampilkan seluruh <strong>${maxNo} peternak</strong> dalam antrean cetak.</span>
-                </div>
               `}
             </div>
           </div>
