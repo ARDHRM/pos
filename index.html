@@ -666,7 +666,7 @@
     border-radius: 16px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
     padding: 8px;
-    z-index: 95;
+    z-index: 250;
   }
   .ios-inspect-search-box {
     position: relative;
@@ -709,6 +709,7 @@
   .slip-jump-wrap {
     position: relative;
     display: inline-flex;
+    z-index: 220;
   }
   .slip-jump-item {
     width: 100%;
@@ -965,6 +966,7 @@
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
     gap: 10px; margin-bottom: 12px; background: var(--surface); padding: 10px 14px;
     border: 1px solid rgba(0,0,0,0.04); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+    position: relative; z-index: 90;
   }
   .ios-search-wrap {
     position: relative;
@@ -2146,6 +2148,8 @@
   }
   #mainContent {
     will-change: opacity, transform;
+    position: relative;
+    z-index: 1;
   }
   .tab-animate-enter {
     animation: iosTabEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
