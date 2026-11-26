@@ -414,6 +414,12 @@
   }
   .farmer-list-row:last-child { border-bottom: none; }
   .farmer-list-row:hover { background: #f2f8ff; }
+  .farmer-no-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 26px; height: 22px; padding: 0 6px; border-radius: 7px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums;
+  }
   .farmer-inline-name {
     border: 1px solid transparent; background: transparent; font-size: 13px; font-weight: 600;
     color: var(--text); padding: 5px 8px; border-radius: 8px; width: 100%; min-width: 0; transition: 0.15s;
@@ -1026,28 +1032,38 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
-    height: 27px;
-    padding: 0 10px;
+    min-width: 42px;
+    height: 30px;
+    padding: 0 12px;
     border-radius: 9999px;
-    background: #ffffff;
-    color: #000000;
-    font-size: 13px;
+    background: #000000;
+    color: #ffffff;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
     font-variant-numeric: tabular-nums;
     border: 2px solid #000000;
     flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .slip-item-no-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #000000;
+    font-variant-numeric: tabular-nums;
   }
   .slip-meta-grid {
     display: grid;
-    grid-template-columns: 1.35fr 0.9fr 1.15fr;
-    gap: 4px 10px;
+    grid-template-columns: 1.15fr 1.15fr 1.15fr;
+    gap: 4px 8px;
     align-items: center;
     font-size: 11.5px;
-    margin-bottom: 7px;
-    padding: 5px 8px;
+    margin-bottom: 8px;
+    padding: 6px 9px;
     border: 1.5px solid #000000;
     border-radius: 4px;
     background: #ffffff;
@@ -1058,14 +1074,25 @@
     gap: 5px;
     min-width: 0;
   }
+  .slip-meta-item.is-bulan-item {
+    justify-content: center;
+    white-space: nowrap;
+  }
+  .slip-meta-item.is-bulan-item .m-v {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
   .slip-meta-item .m-k {
+    font-size: 11px;
     font-weight: 700;
     color: #000000;
     white-space: nowrap;
   }
   .slip-meta-item .m-v {
-    font-size: 12px;
+    font-size: 12.2px;
     font-weight: 900;
+    letter-spacing: -0.01em;
     color: #000000;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1076,42 +1103,45 @@
     align-items: center;
     justify-content: flex-end;
     gap: 5px;
-    padding: 2.5px 7px;
+    padding: 3px 8px;
     border: 1.5px solid #000000;
     border-radius: 4px;
     background: #ffffff;
-    font-size: 11px;
+    font-size: 10.8px;
     font-weight: 800;
     color: #000000;
     white-space: nowrap;
   }
   .slip-harga-highlight strong {
-    font-size: 12.8px;
+    font-size: 12.6px;
     font-weight: 900;
     letter-spacing: -0.01em;
     color: #000000;
+    font-variant-numeric: tabular-nums;
   }
-  .slip-doc-table { width: 100%; border-collapse: collapse; font-size: 11.2px; font-weight: 600; flex: 1 1 auto; height: 100%; color: #000000; }
+  .slip-doc-table { width: 100%; border-collapse: collapse; font-size: 11.2px; font-weight: 600; flex: 1 1 auto; height: 100%; color: #000000; letter-spacing: -0.01em; }
   .slip-doc-table th, .slip-doc-table td {
-    border: 1.2px solid #000000 !important; padding: 2.6px 6px; color: #000000 !important; background: #ffffff !important;
+    border: 1.2px solid #000000 !important; padding: 3px 7px; color: #000000 !important; background: #ffffff !important; line-height: 1.25;
   }
   .slip-doc-table th {
     background: #ffffff !important;
     border-bottom: 2px solid #000000 !important;
     font-weight: 900;
     text-align: center;
-    font-size: 10.6px;
-    letter-spacing: 0.25px;
+    font-size: 10.2px;
+    letter-spacing: 0.35px;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
   .slip-doc-table tr.row-highlight td {
     background: #ffffff !important;
     border-top: 1.8px solid #000000 !important;
     border-bottom: 1.8px solid #000000 !important;
     font-weight: 900;
-    font-size: 11.6px;
+    font-size: 11.5px;
   }
   .slip-doc-table td.slip-rate-emphasized {
-    font-size: 12.6px !important;
+    font-size: 12.2px !important;
     font-weight: 900 !important;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -1123,8 +1153,8 @@
     border-bottom: 2.5px solid #000000 !important;
     font-weight: 900;
     font-size: 12.6px;
-    padding-top: 3.5px;
-    padding-bottom: 3.5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
   .slip-doc-table tr.row-section td {
     background: #ffffff !important;
@@ -1132,21 +1162,27 @@
     border-bottom: 1.6px solid #000000 !important;
     font-weight: 900;
     text-align: left;
-    font-size: 10.8px;
-    letter-spacing: 0.25px;
+    font-size: 10.4px;
+    letter-spacing: 0.35px;
+    padding-top: 3.5px;
+    padding-bottom: 3.5px;
   }
   .slip-summary-strip {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border: 1.5px solid #000000;
+    border: 1.6px solid #000000;
     border-top: none;
     background: #ffffff;
-    font-size: 10.8px;
+    font-size: 11px;
     font-weight: 700;
     color: #000000;
   }
+  .slip-summary-strip strong {
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+  }
   .slip-summary-cell {
-    padding: 4.5px 7px;
+    padding: 5px 8px;
     border-right: 1.2px solid #000000;
     display: flex;
     justify-content: space-between;
@@ -1156,28 +1192,46 @@
   .slip-summary-cell:last-child { border-right: none; }
   .slip-back-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    margin-bottom: 6px; border-bottom: 2.5px solid #000000; padding-bottom: 5px;
+    margin-bottom: 7px; border-bottom: 2.5px solid #000000; padding-bottom: 6px;
   }
   .slip-back-head-title {
     font-weight: 900; font-size: 14.5px; letter-spacing: 0.3px; text-transform: uppercase; color: #000000;
   }
   .slip-back-head-sub {
-    font-size: 11px; font-weight: 800; color: #000000; margin-top: 2px;
+    font-size: 11px; font-weight: 700; color: #000000; margin-top: 2px;
   }
-  .slip-daily-table { width: 100%; border-collapse: collapse; font-size: 10.8px; font-weight: 700; flex: 1 1 auto; height: 100%; color: #000000; }
+  .slip-daily-table { width: 100%; border-collapse: collapse; font-size: 11px; font-weight: 700; flex: 1 1 auto; height: 100%; color: #000000; font-variant-numeric: tabular-nums; }
   .slip-daily-table th, .slip-daily-table td {
-    border: 1.2px solid #000000 !important; padding: 1.6px 7px; text-align: center; background: #ffffff !important; color: #000000 !important;
+    border: 1.2px solid #000000 !important; padding: 2px 7px; text-align: center; background: #ffffff !important; color: #000000 !important;
   }
   .slip-daily-table th {
     background: #ffffff !important;
     border-bottom: 2px solid #000000 !important;
     font-weight: 900;
-    font-size: 10.5px;
+    font-size: 10.4px;
+    letter-spacing: 0.3px;
+  }
+  .slip-tgl-box {
+    display: inline-block;
+    min-width: 58px;
+    padding: 1px 7px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 10.6px;
+    line-height: 1.2;
+    color: #000000;
+    background: #ffffff;
+    text-align: center;
   }
   .slip-back-footer {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
-    margin-top: 6px; font-weight: 900; font-size: 10.8px; color: #000000;
-    padding: 5px 7px; border: 1.8px solid #000000; background: #ffffff; text-align: center;
+    margin-top: 7px; font-weight: 800; font-size: 10.8px; color: #000000;
+    padding: 5px 8px; border: 1.6px solid #000000; background: #ffffff; text-align: center;
+  }
+  .slip-back-footer strong {
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
   }
   .page-tag-screen {
     font-size: 10.5px; font-weight: 700; color: #0284c7; text-transform: uppercase;
@@ -2149,8 +2203,45 @@
       -webkit-overflow-scrolling: touch;
     }
     .slip-doc-table {
-      font-size: 10.5px;
-      table-layout: auto;
+      font-size: 11.4px !important;
+      font-weight: 700 !important;
+    }
+    .slip-doc-table th,
+    .slip-doc-table td {
+      padding: 2.6px 6px !important;
+    }
+    .slip-doc-table tr.row-highlight td {
+      font-size: 11.8px !important;
+      font-weight: 900 !important;
+    }
+    .slip-doc-table td.slip-rate-emphasized {
+      font-size: 12.6px !important;
+      font-weight: 900 !important;
+    }
+    .slip-doc-table tr.row-net-pay td {
+      font-size: 12.8px !important;
+      font-weight: 900 !important;
+    }
+    .slip-daily-table {
+      font-size: 11.2px !important;
+      font-weight: 800 !important;
+    }
+    .slip-summary-strip {
+      grid-template-columns: repeat(3, 1fr) !important;
+      font-size: 11.2px !important;
+      font-weight: 800 !important;
+    }
+    .slip-summary-cell {
+      border-right: 1.2px solid #000000 !important;
+      border-bottom: none !important;
+    }
+    .slip-summary-cell:last-child {
+      border-right: none !important;
+    }
+    .slip-back-footer {
+      grid-template-columns: repeat(4, 1fr) !important;
+      font-size: 11px !important;
+      font-weight: 900 !important;
     }
     .slip-doc-table th,
     .slip-doc-table td {
@@ -2609,11 +2700,16 @@
     .slip-kop p { font-size: 11px !important; }
     .slip-kop-unit { font-size: 10.5px !important; }
     .slip-meta-grid {
-      grid-template-columns: 1.35fr 0.9fr 1.15fr !important;
-      gap: 4px 10px !important;
+      grid-template-columns: 1.15fr 1.15fr 1.15fr !important;
+      gap: 4px 8px !important;
     }
-    .slip-meta-item[style*="justify-content:center"] {
+    .slip-meta-item.is-bulan-item {
       justify-content: center !important;
+    }
+    .slip-meta-item.is-bulan-item .m-v {
+      overflow: visible !important;
+      text-overflow: clip !important;
+      white-space: nowrap !important;
     }
     .slip-harga-highlight {
       width: auto !important;
@@ -2651,7 +2747,13 @@
     .slip-page * {
       color: #000000 !important;
     }
-    .slip-page .slip-badge-box,
+    .slip-page .slip-badge-box {
+      background: #000000 !important;
+      color: #ffffff !important;
+      border: 2px solid #000000 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
     .slip-page .slip-doc-table tr.row-net-pay td {
       background: #ffffff !important;
       color: #000000 !important;
@@ -5744,13 +5846,6 @@ function renderCurrentTab(animate = false) {
     const c = state.config;
     const customPakanList = Array.isArray(c.custom_pakan_items) ? c.custom_pakan_items : [];
     const customRpList = Array.isArray(c.custom_rp_items) ? c.custom_rp_items : [];
-    const fq = String(state.settingsFarmerQuery || '').trim().toLowerCase();
-    const filteredFarmers = state.farmers.filter(f =>
-      !fq ||
-      String(f.nama || '').toLowerCase().includes(fq) ||
-      String(f.no_anggota || '').toLowerCase().includes(fq) ||
-      String(f.no) === fq
-    );
 
     const stdPriceRows = [
       { key: 'harga_susu', title: 'Harga Susu Murni (Setoran)', sub: 'Per Liter', icon: '🥛', bg: '#007aff' },
@@ -5876,7 +5971,7 @@ function renderCurrentTab(animate = false) {
           </div>
 
           <div>
-            <div class="ios-section-header">Daftar Peternak / Anggota (${state.farmers.length})</div>
+            <div class="ios-section-header" id="settingsFarmerSectionHeader">Daftar Peternak / Anggota (${state.farmers.length})</div>
             <div class="ios-add-card">
               <div class="add-farmer-inline">
                 <input type="text" id="newFarmerName" class="ios-pill-input" placeholder="Nama peternak baru...">
@@ -5884,34 +5979,17 @@ function renderCurrentTab(animate = false) {
                 <button type="button" class="btn btn-primary" onclick="addFarmerFromUI()">+ Tambah</button>
               </div>
               <div style="margin-top:10px;">
-                <input type="text" class="ios-pill-input" value="${state.settingsFarmerQuery || ''}" placeholder="🔍 Filter nama atau nomor anggota..."
-                  oninput="state.settingsFarmerQuery = this.value; renderCurrentTab();">
+                <input type="text" id="settingsFarmerSearchInput" class="ios-pill-input" value="${state.settingsFarmerQuery || ''}" placeholder="🔍 Filter nama atau nomor anggota..."
+                  oninput="filterSettingsFarmerList(this.value)">
               </div>
             </div>
 
-            <div class="ios-grouped-list" style="max-height:66vh; overflow-y:auto;">
-              <div class="farmer-list-head">
-                <div class="center">No</div>
-                <div class="center">No. Angg</div>
-                <div>Nama Peternak</div>
-                <div class="center">Aksi</div>
-              </div>
-              ${filteredFarmers.map(f => {
-                const realIdx = state.farmers.indexOf(f);
-                return `
-                  <div class="farmer-list-row">
-                    <div class="center" style="font-weight:700; color:var(--muted);">${f.no}</div>
-                    <div><input type="text" class="farmer-inline-code" value="${f.no_anggota || ''}" placeholder="-" onchange="updateFarmerMeta(${realIdx}, 'no_anggota', this.value)"></div>
-                    <div><input type="text" class="farmer-inline-name" value="${f.nama}" onchange="updateFarmerMeta(${realIdx}, 'nama', this.value)"></div>
-                    <div><button type="button" class="btn btn-danger farmer-del-btn" onclick="askDeleteFarmer(${realIdx})">Hapus</button></div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
+            <div id="settingsFarmerListContainer" class="ios-grouped-list" style="max-height:66vh; overflow-y:auto;"></div>
           </div>
         </div>
       </div>
     `;
+    filterSettingsFarmerList(state.settingsFarmerQuery || '');
   }
 
   // 0C. PENGATURAN SINKRONISASI GOOGLE DRIVE & MULTI-DEVICE
@@ -7274,7 +7352,7 @@ function renderCurrentTab(animate = false) {
         totSoreFarmer += sVal;
         return `
           <tr>
-            <td><strong>Tgl ${dayNum}</strong></td>
+            <td><span class="slip-tgl-box">Tgl ${dayNum}</span></td>
             <td class="num">${pVal ? fmtNum(pVal) : '-'}</td>
             <td class="num">${sVal ? fmtNum(sVal) : '-'}</td>
             <td class="num"><strong>${subDay ? fmtNum(subDay) : '-'}</strong></td>
@@ -7293,12 +7371,12 @@ function renderCurrentTab(animate = false) {
                   <p>${c.slip_kop_subtitle}</p>
                   <div class="slip-kop-unit">UNIT POS: ${c.pos_name} • NO. ANGGOTA: ${f.no_anggota || '-'}</div>
                 </div>
-                <div class="slip-badge-box" title="No. Urut ${f.no}">${f.no}</div>
+                <div class="slip-badge-box" title="No. Urut ${f.no}">#${f.no}</div>
               </div>
 
               <div class="slip-meta-grid">
                 <div class="slip-meta-item"><span class="m-k">NAMA:</span><span class="m-v">${f.nama}</span></div>
-                <div class="slip-meta-item" style="justify-content:center;"><span class="m-k">BULAN:</span><span class="m-v">${getPeriodLabel()}</span></div>
+                <div class="slip-meta-item is-bulan-item"><span class="m-k">BULAN:</span><span class="m-v">${getPeriodLabel()}</span></div>
                 <div style="display:flex; justify-content:flex-end;">
                   <span class="slip-harga-highlight">HARGA SUSU: <strong>${fmtRp(c.harga_susu)}/L</strong></span>
                 </div>
@@ -7318,14 +7396,14 @@ function renderCurrentTab(animate = false) {
                 </thead>
                 <tbody>
                   <tr class="row-highlight">
-                    <td class="center">A1</td>
+                    <td class="center"><span class="slip-item-no-badge">A1</span></td>
                     <td>SETORAN SUSU MURNI (DIBAYAR)</td>
                     <td class="num">${fmtNum(r.displayLiter)} L</td>
                     <td class="num slip-rate-emphasized">${fmtRp(c.harga_susu)}</td>
                     <td class="num">${fmtRp(r.gajiKotor)}</td>
                   </tr>
                   <tr>
-                    <td class="center">A2</td>
+                    <td class="center"><span class="slip-item-no-badge">A2</span></td>
                     <td>TABUNGAN SUSU</td>
                     <td class="num">${r.tabunganLiter ? fmtNum(r.tabunganLiter) + ' L' : '-'}</td>
                     <td class="num">${r.tabunganLiter ? fmtRp(c.harga_susu) : '-'}</td>
@@ -7336,7 +7414,7 @@ function renderCurrentTab(animate = false) {
                   </tr>
                   ${slipItems.map(it => `
                     <tr>
-                      <td class="center">${it.no}</td>
+                      <td class="center"><span class="slip-item-no-badge">${it.no}</span></td>
                       <td>${it.name}</td>
                       <td class="num">${it.qty}</td>
                       <td class="num">${it.harga}</td>
@@ -7375,7 +7453,7 @@ function renderCurrentTab(animate = false) {
                 <div class="slip-back-head-title">${c.slip_back_title}</div>
                 <div class="slip-back-head-sub">${f.nama} • No. Anggota: ${f.no_anggota || '-'} • Bulan ${getPeriodLabel()} • ${c.pos_name}</div>
               </div>
-              <div class="slip-badge-box" title="No. Urut ${f.no}">${f.no}</div>
+              <div class="slip-badge-box" title="No. Urut ${f.no}">#${f.no}</div>
             </div>
             <table class="slip-daily-table">
               <thead>
@@ -7607,6 +7685,51 @@ function renderSettings() {
     badge.textContent = `${getPeriodLabel()} • ${fmtRp(state.config.harga_susu)}/L`;
   }
   renderTopbarSyncIndicator();
+}
+
+function filterSettingsFarmerList(rawQuery = '') {
+  state.settingsFarmerQuery = String(rawQuery || '');
+  const container = document.getElementById('settingsFarmerListContainer');
+  const headerEl = document.getElementById('settingsFarmerSectionHeader');
+  if (!container) return;
+
+  const fq = state.settingsFarmerQuery.trim().toLowerCase();
+  const filteredFarmers = state.farmers.filter(f =>
+    !fq ||
+    String(f.nama || '').toLowerCase().includes(fq) ||
+    String(f.no_anggota || '').toLowerCase().includes(fq) ||
+    String(f.no) === fq
+  );
+
+  if (headerEl) {
+    headerEl.textContent = fq
+      ? `Daftar Peternak / Anggota (${filteredFarmers.length} dari ${state.farmers.length})`
+      : `Daftar Peternak / Anggota (${state.farmers.length})`;
+  }
+
+  container.innerHTML = `
+    <div class="farmer-list-head">
+      <div class="center">No</div>
+      <div class="center">No. Angg</div>
+      <div>Nama Peternak</div>
+      <div class="center">Aksi</div>
+    </div>
+    ${filteredFarmers.length > 0 ? filteredFarmers.map(f => {
+      const realIdx = state.farmers.indexOf(f);
+      return `
+        <div class="farmer-list-row">
+          <div class="center"><span class="farmer-no-pill">#${f.no}</span></div>
+          <div><input type="text" class="farmer-inline-code" value="${f.no_anggota || ''}" placeholder="-" onchange="updateFarmerMeta(${realIdx}, 'no_anggota', this.value)"></div>
+          <div><input type="text" class="farmer-inline-name" value="${f.nama}" onchange="updateFarmerMeta(${realIdx}, 'nama', this.value)"></div>
+          <div><button type="button" class="btn btn-danger farmer-del-btn" onclick="askDeleteFarmer(${realIdx})">Hapus</button></div>
+        </div>
+      `;
+    }).join('') : `
+      <div style="padding:18px 14px; text-align:center; font-size:12px; color:var(--muted);">
+        Tidak ada peternak yang cocok dengan pencarian "<strong>${state.settingsFarmerQuery}</strong>".
+      </div>
+    `}
+  `;
 }
 
 function refreshPotonganInspectBox() {
